@@ -1,0 +1,44 @@
+================================================================================
+SNEHA RAO
+Employee ID: EMP-1007 | Official Email: sneha.rao@enterprise.ai | Contact: +91 98407 89012
+Location: Hyderabad, India | Department: Cyber Security
+Current Designation: Principal Security Architect & Compliance Lead | Joining Date: 2020-09-01
+Industry Experience: 9.0 Years
+================================================================================
+
+1. EXECUTIVE SUMMARY
+--------------------------------------------------------------------------------
+Security Architect with 9 years enforcing zero-trust access control, enterprise multi-tenant database isolation, prompt injection firewall defenses, and ISO 27001 audits.
+
+2. DAILY ROUTINE WORK & CORE RESPONSIBILITIES
+--------------------------------------------------------------------------------
+Conducts automated vulnerability scans, audits prompt injection defenses in LangGraph workflows, manages RBAC authorization keys, and maintains SOC2 compliance logs.
+
+3. TECHNICAL SKILLS & COMPETENCIES
+--------------------------------------------------------------------------------
+Core Competencies: SOC2 | ISO 27001 | Penetration Testing | IAM | OWASP | Cryptography | Guardrails
+Engineering Standards: Agile/Scrum, Git Workflows, Peer Code Reviews, CI/CD Integration
+Compliance & Governance: SOC2, ISO 27001, DPDP/GDPR Data Privacy Guidelines
+
+4. PROFESSIONAL EXPERIENCE & KEY ACHIEVEMENTS
+--------------------------------------------------------------------------------
+Role: Principal Security Architect & Compliance Lead — TalentGraph Enterprise Platform (2022 - Present)
+- Manages high-impact deliverables across the Cyber Security division.
+- Collaborates cross-functionally with Product, AI Systems, and HR leadership.
+- Drives continuous optimization of internal workflows and latency benchmarks.
+- Mentors junior associates and contributes to weekly architectural reviews.
+
+Previous Role: Associate Systems Specialist — Tech Innovations Global (Prior)
+- Engineered scalable microservices and robust database integration layers.
+- Authored comprehensive test suites and automated deployment manifests.
+- Decreased system error rates by 35% through proactive telemetry and monitoring.
+
+5. EDUCATION & CERTIFICATIONS
+--------------------------------------------------------------------------------
+- Bachelor of Technology (B.Tech) in Computer Science & Engineering
+- Professional Cloud & AI Certified Practitioner
+- Enterprise Security & Data Ethics Certification
+
+================================================================================
+Generated via TalentGraph Enterprise Employee Record Vault
+================================================================================

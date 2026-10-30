@@ -1,0 +1,161 @@
+"""
+Enterprise Multi-Agent AI Intelligence Platform
+FastAPI application entry point.
+
+Phase 15 additions:
+  - TimingMiddleware for request observability (X-Request-ID, X-Process-Time)
+  - GET /api/metrics   (Prometheus scrape)
+  - GET /api/metrics/json  (dashboard JSON)
+  - Guardrails integrated at chat & analyze routers
+"""
+
+import os
+import logging
+from contextlib import asynccontextmanager
+from pathlib import Path
+
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
+
+from app.config import get_settings
+from app.api import chat, tasks, documents, approval, analyze, metrics, ml, stream, batch, audit, ats, career, llm, tenants, auth, recruiter, privacy, ats_expansion, employees, recovery
+from app.database.base import init_db
+from app.middleware.timing import TimingMiddleware
+
+settings = get_settings()
+
+# ── Logging ───────────────────────────────────────────────────────────────────
+log_level_name = os.getenv("LOG_LEVEL", settings.LOG_LEVEL if settings.LOG_LEVEL != "INFO" else "WARNING").upper()
+logging.basicConfig(
+    level=getattr(logging, log_level_name, logging.WARNING),
+    format="%(asctime)s | %(levelname)-8s | %(name)s | %(message)s",
+)
+logger = logging.getLogger(__name__)
+
+
+# ── Lifespan (startup / shutdown) ─────────────────────────────────────────────
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    logger.debug("🚀  %s v%s starting up…", settings.APP_NAME, settings.APP_VERSION)
+    try:
+        init_db()
+        logger.debug("🗄️  Multi-tenant database tables initialized.")
+    except Exception as e:
+        logger.warning("Database initialization note: %s", e)
+    async def _async_warmup():
+        try:
+            from app.rag.embeddings import get_embedding_service
+            from app.rag.vector_store import get_vector_store
+            embedder = get_embedding_service()
+            get_vector_store(embedder.dimension)
+            logger.debug("⚡  FAISS Vector Store & Semantic Embeddings pre-warmed.")
+        except Exception as e:
+            logger.debug("FAISS warmup note: %s", e)
+
+    import asyncio
+    asyncio.create_task(_async_warmup())
+
+    async def _auto_open_browser():
+        await asyncio.sleep(0.15)
+        try:
+            from app.utils.browser import open_platform_browser
+            port = int(os.getenv("PORT", "8000"))
+            host = os.getenv("HOST", "127.0.0.1")
+            display_host = "127.0.0.1" if host in ("0.0.0.0", "::") else host
+            open_platform_browser(f"http://{display_host}:{port}")
+        except Exception as e:
+            logger.debug("Auto browser open note: %s", e)
+
+    asyncio.create_task(_auto_open_browser())
+    yield
+    logger.debug("🛑  Application shutting down.")
+
+
+# ── App factory ───────────────────────────────────────────────────────────────
+app = FastAPI(
+    title=settings.APP_NAME,
+    version=settings.APP_VERSION,
+    description=(
+        "An enterprise-grade multi-agent AI platform for intelligent "
+        "decision support powered by LangGraph, RAG, NLP, ML, Guardrails "
+        "and Human-in-the-Loop governance."
+    ),
+    lifespan=lifespan,
+)
+
+# ── Middleware stack (order matters: outermost = last added) ───────────────────
+app.add_middleware(TimingMiddleware)          # Phase 15: observability
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],          # tighten in production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# ── Routers ───────────────────────────────────────────────────────────────────
+app.include_router(chat.router)
+app.include_router(tasks.router)
+app.include_router(documents.router)
+app.include_router(approval.router)
+app.include_router(analyze.router)
+app.include_router(metrics.router)           # Phase 15: monitoring endpoints
+app.include_router(ml.router)                # Phase 19: trained ML model endpoints
+app.include_router(stream.router)            # Phase 20: real-time SSE streaming endpoints
+app.include_router(batch.router)             # Phase 22: batch multi-candidate ranking endpoints
+app.include_router(audit.router)             # Phase 24: audit trail & observability endpoints
+app.include_router(ats.router)               # ATS Resume & Score Analyzer endpoints
+app.include_router(career.router)            # Live Career & Location Preference Matching endpoints
+app.include_router(llm.router)               # Azure OpenAI & LLM runtime configuration endpoints
+app.include_router(tenants.router)           # Multi-tenant isolation & provisioning endpoints
+app.include_router(auth.router)              # Authentication & RBAC endpoints
+app.include_router(recruiter.router)         # Recruiter Dashboard, Screening & Decisions endpoints
+app.include_router(privacy.router)           # DPDP & GDPR Compliance endpoints
+app.include_router(ats_expansion.router)     # ATS integrations & Internal Mobility endpoints
+app.include_router(employees.router)         # Phase 25: Employee Management & Staff Directory
+app.include_router(recovery.router)          # Rollback & Recovery (Recycle Bin with 7-Day Retention)
+
+
+
+
+
+# ── Global exception handler ──────────────────────────────────────────────────
+@app.exception_handler(Exception)
+async def global_exception_handler(request, exc: Exception):
+    logger.exception("Unhandled exception: %s", exc)
+    return JSONResponse(
+        status_code=500,
+        content={"error": "Internal server error. Please try again later."},
+    )
+
+
+# ── Health endpoint ───────────────────────────────────────────────────────────
+@app.get(
+    "/api/health",
+    tags=["Health"],
+    summary="Platform health check",
+)
+async def health_check():
+    """
+    Returns the current operational status of the platform.
+    Used by load-balancers, Docker HEALTHCHECK, and CI pipelines.
+    """
+    from app.services.monitoring_service import get_monitoring_service
+    svc = get_monitoring_service()
+    m = svc.get_metrics_json()
+    return {
+        "status": "ok",
+        "app": settings.APP_NAME,
+        "version": settings.APP_VERSION,
+        "uptime_seconds": m["uptime_seconds"],
+        "guardrails": "active",
+        "monitoring": "active",
+    }
+
+
+# ── Static files & Frontend UI ────────────────────────────────────────────────
+frontend_dir = Path(__file__).resolve().parent.parent / "frontend"
+if frontend_dir.exists():
+    app.mount("/", StaticFiles(directory=str(frontend_dir), html=True), name="frontend")

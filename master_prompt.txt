@@ -1,0 +1,1173 @@
+<USER_REQUEST>
+# MASTER PROJECT PROMPT
+
+You are an expert AI/ML, Generative AI, Agentic AI and full-stack software engineer.
+
+Build a complete, production-style portfolio project called:
+
+# Enterprise Multi-Agent AI Intelligence Platform
+
+The project is being built for a B.Tech Artificial Intelligence & Data Science student targeting:
+
+- AI Engineer
+- ML Engineer
+- Generative AI Engineer
+- NLP Engineer
+- AI/ML Intern
+- Agentic AI Engineer
+- GenAI Intern
+
+The project must be technically strong enough to demonstrate practical knowledge of:
+
+- Artificial Intelligence
+- Machine Learning
+- Deep Learning
+- NLP
+- Generative AI
+- LLMs
+- RAG
+- Agentic AI
+- Multi-agent systems
+- LangGraph
+- Tool calling
+- Vector databases
+- Embeddings
+- Memory/state
+- Human-in-the-loop
+- Evaluation
+- Guardrails
+- REST APIs
+- Docker
+- Production-style software architecture
+
+IMPORTANT:
+
+This is NOT a simple chatbot.
+
+Do not build a fake multi-agent demo where several agents simply generate different pieces of text.
+
+Every major feature must actually work.
+
+The application must be understandable and explainable by a B.Tech AI & DS student during an interview.
+
+--------------------------------------------------
+# 1. PROJECT PURPOSE
+--------------------------------------------------
+
+The platform is an AI-powered decision-support system.
+
+A user provides a complex task.
+
+Example:
+
+"Analyze this AI/ML job description and my resume. Research the company, identify required skills, compare them with my skills, find my skill gaps, retrieve relevant information from my uploaded learning documents, and create a personalized learning and project recommendation."
+
+The system should automatically:
+
+1. Understand the request.
+2. Create a plan.
+3. Decide which agents are required.
+4. Execute the required agents.
+5. Call tools when necessary.
+6. Retrieve information from documents using RAG.
+7. Perform NLP analysis.
+8. Perform ML-based analysis where appropriate.
+9. Use an LLM for reasoning and generation.
+10. Evaluate the generated result.
+11. Ask for human approval before consequential actions.
+12. Return a final structured response.
+
+--------------------------------------------------
+# 2. HIGH-LEVEL ARCHITECTURE
+--------------------------------------------------
+
+Implement this architecture:
+
+USER
+  |
+  v
+WEB FRONTEND
+  |
+  v
+FASTAPI BACKEND
+  |
+  v
+ORCHESTRATOR AGENT
+  |
+  +-------------------+
+  |                   |
+  v                   v
+RESEARCH AGENT     NLP AGENT
+  |                   |
+  v                   v
+External APIs       NLP Pipeline
+                      |
+                      v
+                  ML AGENT
+                      |
+                      v
+                 RAG AGENT
+                      |
+                      v
+              KNOWLEDGE BASE
+                      |
+                      v
+                  LLM/GENAI
+                      |
+                      v
+            RECOMMENDATION AGENT
+                      |
+                      v
+              EVALUATION AGENT
+                      |
+                      v
+              HUMAN APPROVAL
+                      |
+                      v
+                FINAL ANSWER
+
+Use LangGraph to orchestrate the agents and maintain workflow state.
+
+--------------------------------------------------
+# 3. CORE AGENTS
+--------------------------------------------------
+
+Create these actual agents.
+
+## A. ORCHESTRATOR AGENT
+
+Responsibilities:
+
+- Receive user task.
+- Understand intent.
+- Break task into subtasks.
+- Decide which agents are needed.
+- Maintain workflow state.
+- Route execution.
+- Handle agent failures.
+- Combine results.
+
+Do not make the orchestrator perform every task itself.
+
+It must delegate work to specialized agents.
+
+--------------------------------------------------
+
+## B. RESEARCH AGENT
+
+Responsibilities:
+
+- Research companies.
+- Research job descriptions.
+- Search approved external APIs.
+- Collect structured information.
+- Return source URLs when available.
+- Never invent external information.
+
+Create tools such as:
+
+search_company()
+search_jobs()
+get_job_details()
+
+External API failures must be handled gracefully.
+
+Do not make external APIs mandatory for unit tests.
+
+Mock external APIs in tests.
+
+--------------------------------------------------
+
+## C. NLP AGENT
+
+Responsibilities:
+
+- Text preprocessing.
+- Keyword extraction.
+- Skill extraction.
+- Named entity extraction where useful.
+- Job requirement extraction.
+- Resume skill extraction.
+- Semantic similarity.
+- Text classification where appropriate.
+
+Use appropriate NLP/transformer models.
+
+Do not use an LLM for every NLP task.
+
+Use traditional NLP/ML where it makes more sense.
+
+--------------------------------------------------
+
+## D. ML AGENT
+
+Responsibilities:
+
+- Resume/job similarity.
+- Skill matching.
+- Ranking.
+- Classification.
+- Skill-gap scoring.
+- Basic prediction.
+
+Use scikit-learn and/or transformer embeddings where appropriate.
+
+Do not add meaningless ML models simply to claim "Machine Learning."
+
+Every model must have a purpose.
+
+The system should explain how the ML result was produced.
+
+--------------------------------------------------
+
+## E. RAG AGENT
+
+Implement a real Retrieval-Augmented Generation pipeline.
+
+Pipeline:
+
+DOCUMENT
+   |
+   v
+TEXT EXTRACTION
+   |
+   v
+CHUNKING
+   |
+   v
+EMBEDDINGS
+   |
+   v
+VECTOR DATABASE
+   |
+   v
+SIMILARITY SEARCH
+   |
+   v
+RETRIEVED CONTEXT
+   |
+   v
+LLM
+   |
+   v
+GROUNDED ANSWER
+
+Allow users to upload documents such as:
+
+- PDF
+- TXT
+- DOCX where practical
+
+Create:
+
+document_loader
+chunker
+embedding_service
+vector_store
+retriever
+
+Use FAISS or Chroma.
+
+Choose the simpler reliable option.
+
+The application must show retrieved sources/context to the user.
+
+The LLM must be instructed to distinguish retrieved evidence from unsupported information.
+
+--------------------------------------------------
+# 4. GENERATIVE AI
+--------------------------------------------------
+
+Use an LLM for:
+
+- Reasoning.
+- Planning.
+- Synthesis.
+- Summarization.
+- Recommendation generation.
+- Natural-language explanations.
+
+Use environment variables for API credentials.
+
+Example:
+
+LLM_API_KEY=your_key_here
+
+Never hardcode API keys.
+
+Create:
+
+.env.example
+
+Never commit .env.
+
+If the API key is missing, display a useful error message rather than crashing.
+
+Design the LLM service so the provider can be changed later.
+
+--------------------------------------------------
+# 5. TOOL CALLING
+--------------------------------------------------
+
+Implement genuine tool calling.
+
+Create tools such as:
+
+search_jobs()
+search_company()
+analyze_document()
+extract_skills()
+calculate_similarity()
+retrieve_knowledge()
+run_ml_prediction()
+generate_report()
+
+Tools must:
+
+- Have clear descriptions.
+- Have validated inputs.
+- Return structured outputs.
+- Handle errors.
+- Have timeouts where appropriate.
+- Never expose secrets.
+
+Use Pydantic models for structured tool inputs and outputs.
+
+The agents must actually decide when to call tools.
+
+--------------------------------------------------
+# 6. MEMORY AND STATE
+--------------------------------------------------
+
+Use LangGraph state/checkpointing where appropriate.
+
+The system should maintain:
+
+- Current task.
+- User request.
+- Agent outputs.
+- Tool outputs.
+- Retrieved documents.
+- Conversation history.
+- Intermediate results.
+- Evaluation result.
+
+Do not create unnecessarily complicated long-term memory.
+
+Session-level memory is sufficient initially.
+
+--------------------------------------------------
+# 7. HUMAN-IN-THE-LOOP
+--------------------------------------------------
+
+Implement a genuine approval mechanism.
+
+Example:
+
+The system prepares a job application message.
+
+Before any consequential action:
+
+-----------------------------------
+APPLICATION READY
+
+Company: ABC Technologies
+Role: AI/ML Engineer
+
+Message prepared.
+
+[ APPROVE ]
+[ REJECT ]
+-----------------------------------
+
+The system must wait for the user's decision.
+
+Never automatically send applications, emails, or other consequential external actions.
+
+Human approval must be represented in the actual workflow/state.
+
+--------------------------------------------------
+# 8. EVALUATION AGENT
+--------------------------------------------------
+
+Create an Evaluation Agent.
+
+It must evaluate generated results for:
+
+- Relevance.
+- Completeness.
+- Groundedness.
+- Potential hallucination.
+- Task completion.
+- Tool execution success.
+
+Return structured evaluation data such as:
+
+{
+    "relevance": ...,
+    "groundedness": ...,
+    "completeness": ...,
+    "task_completed": true,
+    "issues": [...]
+}
+
+Do not hardcode fake scores.
+
+Scores must be calculated from actual evaluation logic.
+
+--------------------------------------------------
+# 9. GUARDRAILS
+--------------------------------------------------
+
+Implement:
+
+- Input validation.
+- Pydantic schemas.
+- File validation.
+- File size limits.
+- Tool permission checks.
+- API timeout handling.
+- Invalid tool-call handling.
+- LLM failure handling.
+- Prompt-injection awareness for retrieved documents.
+- Sensitive-information protection.
+- Human approval before consequential actions.
+
+Never expose raw Python stack traces to normal users.
+
+--------------------------------------------------
+# 10. EXAMPLE COMPLETE WORKFLOW
+--------------------------------------------------
+
+The following workflow MUST work.
+
+User uploads:
+
+1. Resume.pdf
+2. AI_ML_Job.pdf
+3. Learning_Roadmap.pdf
+
+User asks:
+
+"Analyze whether I match this AI/ML role and tell me what I should learn."
+
+Workflow:
+
+USER
+ |
+ v
+ORCHESTRATOR
+ |
+ +--> NLP AGENT
+ |       |
+ |       +--> Extract job skills
+ |       +--> Extract resume skills
+ |
+ +--> ML AGENT
+ |       |
+ |       +--> Calculate similarity
+ |       +--> Rank skill gaps
+ |
+ +--> RAG AGENT
+ |       |
+ |       +--> Search Learning_Roadmap.pdf
+ |       +--> Retrieve relevant chunks
+ |
+ +--> RESEARCH AGENT
+ |       |
+ |       +--> Research company if required
+ |
+ v
+RECOMMENDATION AGENT
+ |
+ v
+EVALUATION AGENT
+ |
+ v
+FINAL RESPONSE
+
+Example result:
+
+CURRENT MATCH
+
+Strong:
+- Python
+- Machine Learning
+- NLP
+- SQL
+
+Needs improvement:
+- RAG
+- LLM application development
+- TensorFlow
+- Cloud
+
+RECOMMENDED LEARNING ORDER:
+
+1. LLM fundamentals
+2. Embeddings
+3. Vector databases
+4. RAG
+5. LangGraph
+6. Tool calling
+7. Deployment
+
+The result must contain evidence explaining why each recommendation was made.
+
+--------------------------------------------------
+# 11. FRONTEND
+--------------------------------------------------
+
+Create a professional enterprise AI dashboard.
+
+Design requirements:
+
+- Modern.
+- Dark AI theme.
+- Professional MNC-style appearance.
+- Responsive.
+- Clean typography.
+- Smooth transitions.
+- Subtle animations.
+- No excessive neon effects.
+- No unnecessary visual clutter.
+
+Main sections:
+
+1. Dashboard
+2. AI Chat
+3. Upload Documents
+4. Agent Execution
+5. Knowledge Base
+6. Analysis Results
+7. Evaluation
+8. Approval Requests
+
+--------------------------------------------------
+# 12. CHAT INTERFACE
+--------------------------------------------------
+
+Create a professional AI chat interface.
+
+Example:
+
+USER:
+Analyze this job description against my resume.
+
+SYSTEM:
+
+Planning task...
+
+✓ Orchestrator
+✓ NLP Agent
+✓ ML Agent
+✓ RAG Agent
+✓ Evaluation Agent
+
+FINAL ANALYSIS
+
+...
+
+Do not fake agent execution statuses.
+
+The frontend must receive real workflow events/results from the backend.
+
+--------------------------------------------------
+# 13. AGENT EXECUTION VISUALIZATION
+--------------------------------------------------
+
+Show the actual execution workflow:
+
+User Request
+     |
+     v
+Planning
+     |
+     v
+Research Agent
+     |
+     v
+NLP Agent
+     |
+     v
+ML Agent
+     |
+     v
+RAG Agent
+     |
+     v
+Recommendation Agent
+     |
+     v
+Evaluation Agent
+     |
+     v
+Final Response
+
+Each agent should show:
+
+- Waiting
+- Running
+- Completed
+- Failed
+
+Use actual backend state.
+
+--------------------------------------------------
+# 14. BACKEND
+--------------------------------------------------
+
+Use:
+
+Python
+FastAPI
+Pydantic
+LangGraph
+
+Create APIs:
+
+POST /api/chat
+POST /api/upload
+POST /api/analyze
+POST /api/approve
+GET /api/health
+GET /api/task/{task_id}
+
+Use clean Pydantic schemas.
+
+Return JSON.
+
+Use proper HTTP status codes.
+
+--------------------------------------------------
+# 15. DATABASE
+--------------------------------------------------
+
+Initially use SQLite.
+
+Store:
+
+- Users/session information where necessary.
+- Conversations.
+- Tasks.
+- Uploaded document metadata.
+- Agent execution records.
+- Evaluation results.
+
+Do not introduce PostgreSQL unless required.
+
+--------------------------------------------------
+# 16. PROJECT STRUCTURE
+--------------------------------------------------
+
+Create a clean structure similar to:
+
+enterprise_multi_agent_ai/
+│
+├── app/
+│   ├── main.py
+│   ├── config.py
+│   ├── dependencies.py
+│   │
+│   ├── agents/
+│   │   ├── orchestrator.py
+│   │   ├── research_agent.py
+│   │   ├── nlp_agent.py
+│   │   ├── ml_agent.py
+│   │   ├── rag_agent.py
+│   │   ├── recommendation_agent.py
+│   │   └── evaluation_agent.py
+│   │
+│   ├── workflows/
+│   │   └── agent_graph.py
+│   │
+│   ├── tools/
+│   │   ├── search_tools.py
+│   │   ├── document_tools.py
+│   │   ├── ml_tools.py
+│   │   └── analysis_tools.py
+│   │
+│   ├── rag/
+│   │   ├── loader.py
+│   │   ├── chunker.py
+│   │   ├── embeddings.py
+│   │   ├── vector_store.py
+│   │   └── retriever.py
+│   │
+│   ├── services/
+│   │   ├── llm_service.py
+│   │   ├── evaluation_service.py
+│   │   └── memory_service.py
+│   │
+│   ├── models/
+│   │   └── schemas.py
+│   │
+│   └── database/
+│       ├── database.py
+│       └── models.py
+│
+├── frontend/
+│
+├── tests/
+│
+├── uploads/
+│
+├── data/
+│
+├── .env.example
+├── .gitignore
+├── requirements.txt
+├── Dockerfile
+├── README.md
+└── run.py
+
+You may modify this structure if there is a strong technical reason.
+
+Keep it understandable.
+
+--------------------------------------------------
+# 17. MACHINE LEARNING REQUIREMENT
+--------------------------------------------------
+
+Include at least one meaningful ML component.
+
+Possible implementation:
+
+Resume/job compatibility model:
+
+Input:
+- Resume text
+- Job description
+
+Features:
+- TF-IDF similarity
+- Skill overlap
+- Semantic similarity
+
+Output:
+
+Compatibility score.
+
+Use a clear formula/model and document it.
+
+If a trained ML model is used, include:
+
+- Training script.
+- Dataset/sample dataset.
+- Evaluation.
+- Saved model.
+- Inference code.
+
+Do not download huge models unnecessarily.
+
+--------------------------------------------------
+# 18. DEEP LEARNING REQUIREMENT
+--------------------------------------------------
+
+Use transformer-based embeddings where appropriate.
+
+Example:
+
+Sentence Transformers
+
+Use embeddings for:
+
+- Semantic similarity.
+- Document retrieval.
+- Resume/job comparison.
+
+Do not add a CNN/RNN simply to claim Deep Learning.
+
+Explain in README why transformer embeddings are used.
+
+--------------------------------------------------
+# 19. NLP REQUIREMENT
+--------------------------------------------------
+
+Implement real NLP functionality:
+
+- Text cleaning.
+- Skill extraction.
+- Entity extraction where useful.
+- Keyword extraction.
+- Semantic similarity.
+- Requirement extraction.
+
+Use appropriate libraries.
+
+--------------------------------------------------
+# 20. TESTING
+--------------------------------------------------
+
+Create tests for:
+
+- Health endpoint.
+- Chat endpoint.
+- Upload validation.
+- Pydantic schemas.
+- NLP skill extraction.
+- ML similarity.
+- RAG retrieval.
+- Tool execution.
+- Agent routing.
+- Error handling.
+- Human approval.
+- Evaluation.
+
+External APIs must be mocked in tests.
+
+The project must have a clear test command.
+
+--------------------------------------------------
+# 21. LOGGING
+--------------------------------------------------
+
+Implement structured logging.
+
+Log:
+
+- Task ID.
+- Agent name.
+- Tool name.
+- Start time.
+- End time.
+- Status.
+- Errors.
+
+Never log:
+
+- API keys.
+- Passwords.
+- Sensitive resume information unnecessarily.
+
+--------------------------------------------------
+# 22. REQUIREMENTS
+--------------------------------------------------
+
+Create a clean requirements.txt.
+
+Do not install unnecessary packages.
+
+Avoid huge dependencies unless they are genuinely required.
+
+The application should remain deployable.
+
+Pin versions only when necessary for compatibility.
+
+--------------------------------------------------
+# 23. ENVIRONMENT
+--------------------------------------------------
+
+Create:
+
+.env.example
+
+Example:
+
+LLM_API_KEY=
+LLM_MODEL=
+SEARCH_API_KEY=
+
+Never commit:
+
+.env
+
+Add .env to .gitignore.
+
+--------------------------------------------------
+# 24. DOCKER
+--------------------------------------------------
+
+Create a Dockerfile.
+
+The application must be able to run with Docker.
+
+Provide:
+
+docker build
+docker run
+
+instructions in README.
+
+--------------------------------------------------
+# 25. README
+--------------------------------------------------
+
+Create a professional GitHub README.
+
+Include:
+
+# Enterprise Multi-Agent AI Intelligence Platform
+
+## Overview
+
+## Problem Statement
+
+## Solution
+
+## Key Features
+
+## Architecture
+
+## Application Workflow
+
+## Multi-Agent Architecture
+
+## RAG Pipeline
+
+## ML/NLP Pipeline
+
+## Tool Calling
+
+## Memory
+
+## Human-in-the-Loop
+
+## Evaluation
+
+## Guardrails
+
+## Technology Stack
+
+## Project Structure
+
+## Installation
+
+## Environment Variables
+
+## Running Locally
+
+## API Endpoints
+
+## Testing
+
+## Docker
+
+## Screenshots
+
+## Limitations
+
+## Future Improvements
+
+## Author
+
+Use Mermaid diagrams where appropriate.
+
+--------------------------------------------------
+# 26. SECURITY
+--------------------------------------------------
+
+Never hardcode:
+
+- API keys.
+- Passwords.
+- Tokens.
+
+Validate uploaded files.
+
+Prevent unsafe file paths.
+
+Use secure temporary storage where possible.
+
+Do not allow arbitrary tool execution.
+
+--------------------------------------------------
+# 27. PERFORMANCE
+--------------------------------------------------
+
+Avoid unnecessarily loading large models repeatedly.
+
+Load reusable models once when appropriate.
+
+Cache embeddings where appropriate.
+
+Use timeouts for external APIs.
+
+Handle failures gracefully.
+
+--------------------------------------------------
+# 28. DEPLOYMENT
+--------------------------------------------------
+
+Prepare the project for deployment.
+
+The backend must have a production-friendly startup command.
+
+Do not assume Vercel is automatically the best platform for the complete application.
+
+If a particular component requires a persistent/vector/database/runtime environment, document the appropriate deployment option.
+
+Keep local development working first.
+
+--------------------------------------------------
+# 29. IMPORTANT DEVELOPMENT RULE
+--------------------------------------------------
+
+DO NOT build the entire project in one uncontrolled operation.
+
+Build in phases.
+
+PHASE 1:
+Architecture + folder structure + configuration + FastAPI health endpoint.
+
+PHASE 2:
+LLM service + configuration.
+
+PHASE 3:
+Pydantic schemas + basic API.
+
+PHASE 4:
+NLP functionality.
+
+PHASE 5:
+ML functionality.
+
+PHASE 6:
+RAG pipeline.
+
+PHASE 7:
+Tools.
+
+PHASE 8:
+LangGraph orchestrator.
+
+PHASE 9:
+Specialized agents.
+
+PHASE 10:
+Memory/state.
+
+PHASE 11:
+Evaluation.
+
+PHASE 12:
+Human-in-the-loop.
+
+PHASE 13:
+Frontend.
+
+PHASE 14:
+Integration.
+
+PHASE 15:
+Testing.
+
+PHASE 16:
+Docker + deployment preparation.
+
+PHASE 17:
+README + documentation.
+
+AFTER EACH PHASE:
+
+1. Run tests.
+2. Run the application.
+3. Check for errors.
+4. Fix errors.
+5. Do not break previously working functionality.
+6. Show me what was created.
+7. Wait for my confirmation before moving to the next phase.
+
+START WITH PHASE 1 ONLY.
+
+DO NOT START PHASE 2 UNTIL I CONFIRM.
+
+--------------------------------------------------
+# 30. CRITICAL RULES
+--------------------------------------------------
+
+DO NOT:
+
+- Create a simple chatbot.
+- Fake agent behavior.
+- Fake tool calls.
+- Fake evaluation scores.
+- Hardcode research results.
+- Hardcode API keys.
+- Create meaningless ML models.
+- Add unnecessary frameworks.
+- Create hundreds of unnecessary files.
+- Over-engineer the project.
+- Delete working code without explanation.
+- Replace the entire project structure unnecessarily.
+- Hide errors.
+- Ignore failed tests.
+
+DO:
+
+- Keep the code modular.
+- Use clear names.
+- Add comments where useful.
+- Use type hints.
+- Use Pydantic validation.
+- Handle exceptions.
+- Write tests.
+- Keep dependencies reasonable.
+- Keep the architecture explainable.
+- Keep the UI professional.
+- Document important technical decisions.
+- Verify every feature before calling it complete.
+
+--------------------------------------------------
+# 31. FINAL INTERVIEW REQUIREMENT
+--------------------------------------------------
+
+The finished project must allow the developer to clearly explain:
+
+1. What Agentic AI means.
+2. Why LangGraph was used.
+3. How agents communicate.
+4. How the orchestrator works.
+5. How tool calling works.
+6. How RAG works.
+7. Why embeddings are used.
+8. Why a vector database is used.
+9. How NLP is used.
+10. How ML is used.
+11. How transformer embeddings are used.
+12. How memory/state works.
+13. How human approval works.
+14. How hallucination risk is reduced.
+15. How evaluation works.
+16. How errors are handled.
+17. How the application can be deployed.
+
+The architecture must therefore be technically real, not just designed to look impressive.
+
+--------------------------------------------------
+# START NOW
+--------------------------------------------------
+
+Create the project workspace.
+
+Start ONLY with PHASE 16.
+
+Do not implement later phases yet.
+
+At the end of Phase 16:
+
+- Show the created folder structure.
+- Show the important files.
+- Install only Phase-16 dependencies.
+- Run the FastAPI application.
+- Verify GET /api/health.
+- Run the initial tests.
+- Report the exact commands used.
+- Stop and wait for my confirmation before Phase 17.
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-10-12T21:27:36+05:30.
+
+The user's current state is as follows:
+Active Document: e:\ADVANANCED ML PROJECTS\Enterprise_Multi_Agent_AI\tests\test_ml_service.py (LANGUAGE_PYTHON)
+Cursor is on line: 1
+Other open documents:
+- e:\ADVANANCED ML PROJECTS\Enterprise_Multi_Agent_AI\tests\test_ml_service.py (LANGUAGE_PYTHON)
+- e:\ADVANANCED ML PROJECTS\Enterprise_Multi_Agent_AI\tests\test_guardrails.py (LANGUAGE_PYTHON)
+- e:\ADVANANCED ML PROJECTS\Enterprise_Multi_Agent_AI\frontend\index.html (LANGUAGE_HTML)
+- e:\ADVANANCED ML PROJECTS\Enterprise_Multi_Agent_AI\frontend\js\api.js (LANGUAGE_JAVASCRIPT)
+- e:\ADVANANCED ML PROJECTS\Enterprise_Multi_Agent_AI\app\services\task_manager.py (LANGUAGE_PYTHON)
+</ADDITIONAL_METADATA>
+<USER_SETTINGS_CHANGE>
+The user changed setting `Model Selection` from None to Gemini 3.8 Flash (High). No need to comment on this change if the user doesn't ask about it. If reporting what model you are, please use a human readable name instead of the exact string.
+</USER_SETTINGS_CHANGE>

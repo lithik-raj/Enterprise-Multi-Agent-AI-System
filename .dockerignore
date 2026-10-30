@@ -1,0 +1,42 @@
+# ── Secrets and Local Environment ─────────────────────────────────────────────
+.env
+*.env.local
+*.env.*.local
+
+# ── Git & Version Control ────────────────────────────────────────────────────
+.git
+.gitignore
+
+# ── Python bytecode & Virtual Environments ────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+env/
+ENV/
+
+# ── Testing & Code Coverage ───────────────────────────────────────────────────
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# ── Editor & IDE Configuration ───────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── Logs & Runtime Temporary Storage ─────────────────────────────────────────
+logs/
+*.log
+
+# ── Application Runtime Storage (Mounted via volumes in production) ───────────
+uploads/*
+!uploads/.gitkeep
+data/*.db
+data/vector_store/*
+!data/vector_store/.gitkeep

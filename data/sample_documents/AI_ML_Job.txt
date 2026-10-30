@@ -1,0 +1,30 @@
+DeepTech Labs — Enterprise AI Systems
+Job Title: AI/ML Engineer (Multi-Agent Platforms & Agentic Systems)
+Location: Remote (Global)
+Employment Type: Full-time / High-Potential Graduate Engineer
+
+ABOUT DEEPTECH LABS
+DeepTech Labs is a venture-backed enterprise AI research and engineering company. We build autonomous multi-agent decision support platforms for Fortune 500 enterprises using LangGraph, RAG, and fine-tuned language models.
+
+ROLE OVERVIEW
+We are looking for an ambitious AI/ML Engineer to design, implement, and deploy production-grade multi-agent AI systems. You will work on LangGraph stateful orchestration, dense vector search with FAISS, and custom NLP skill extraction pipelines.
+
+KEY RESPONSIBILITIES
+- Build stateful cyclic agent graphs with LangGraph, including Supervisor-Worker patterns and MemorySaver checkpointing.
+- Implement Retrieval-Augmented Generation (RAG) pipelines using FAISS vector databases and SentenceTransformer embeddings.
+- Develop deterministic tool calling interfaces with Pydantic validation.
+- Implement rigorous evaluation agents measuring groundedness, relevance, and hallucinations.
+- Integrate Human-in-the-Loop (HITL) approval gates before consequential actions.
+- Package and deploy microservices with FastAPI and Docker.
+
+REQUIREMENTS & CORE SKILLS
+- Strong programming expertise in Python and REST API development (FastAPI).
+- Demonstrated understanding of Machine Learning and NLP algorithms (Scikit-learn, TF-IDF, spaCy).
+- Hands-on experience or deep theoretical knowledge of:
+  * LangGraph and Multi-Agent Orchestration
+  * Large Language Models (LLMs) and Prompt Engineering
+  * Vector Databases (FAISS or Chroma) and Dense Embeddings
+  * Retrieval-Augmented Generation (RAG)
+  * Tool Calling and Human-in-the-Loop workflows
+- Containerization with Docker and structured software testing with pytest.
+- Passion for Explainable AI, Grounded Generation, and Production Engineering.

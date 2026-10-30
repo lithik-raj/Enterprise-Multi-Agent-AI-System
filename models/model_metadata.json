@@ -1,0 +1,22 @@
+{
+  "samples_count": 20,
+  "r2_score": 0.9999,
+  "mean_absolute_error": 0.0021,
+  "root_mean_squared_error": 0.0027,
+  "classification_accuracy": 1.0,
+  "f1_score": 1.0,
+  "feature_names": [
+    "tfidf_cosine_similarity",
+    "skill_overlap_ratio",
+    "skill_jaccard_similarity",
+    "skill_count_balance",
+    "text_length_ratio"
+  ],
+  "feature_importances": {
+    "tfidf_cosine_similarity": 0.49509006034016284,
+    "skill_overlap_ratio": 0.3378128765498388,
+    "skill_jaccard_similarity": 0.10126437282458658,
+    "skill_count_balance": 0.04631555572523946,
+    "text_length_ratio": 0.01951713456017221
+  }
+}

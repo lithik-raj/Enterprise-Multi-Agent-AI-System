@@ -1,0 +1,44 @@
+================================================================================
+MEERA SUNDARAM
+Employee ID: EMP-1005 | Official Email: meera.sundaram@enterprise.ai | Contact: +91 98405 67890
+Location: Bengaluru, India | Department: Human Resources
+Current Designation: Senior HR Business Partner & Talent Lead | Joining Date: 2023-01-09
+Industry Experience: 5.5 Years
+================================================================================
+
+1. EXECUTIVE SUMMARY
+--------------------------------------------------------------------------------
+Senior HR Business Partner specializing in strategic workforce planning, recruitment governance, DPDP/GDPR compliance, and employee lifecycle management.
+
+2. DAILY ROUTINE WORK & CORE RESPONSIBILITIES
+--------------------------------------------------------------------------------
+Conducts talent acquisition and executive interviews, oversees staff offboarding workflows, maintains compliance audits for DPDP/GDPR, and facilitates quarterly reviews.
+
+3. TECHNICAL SKILLS & COMPETENCIES
+--------------------------------------------------------------------------------
+Core Competencies: Talent Acquisition | HR Strategy | Employee Relations | ATS | Onboarding | DPDP/GDPR
+Engineering Standards: Agile/Scrum, Git Workflows, Peer Code Reviews, CI/CD Integration
+Compliance & Governance: SOC2, ISO 27001, DPDP/GDPR Data Privacy Guidelines
+
+4. PROFESSIONAL EXPERIENCE & KEY ACHIEVEMENTS
+--------------------------------------------------------------------------------
+Role: Senior HR Business Partner & Talent Lead — TalentGraph Enterprise Platform (2022 - Present)
+- Manages high-impact deliverables across the Human Resources division.
+- Collaborates cross-functionally with Product, AI Systems, and HR leadership.
+- Drives continuous optimization of internal workflows and latency benchmarks.
+- Mentors junior associates and contributes to weekly architectural reviews.
+
+Previous Role: Associate Systems Specialist — Tech Innovations Global (Prior)
+- Engineered scalable microservices and robust database integration layers.
+- Authored comprehensive test suites and automated deployment manifests.
+- Decreased system error rates by 35% through proactive telemetry and monitoring.
+
+5. EDUCATION & CERTIFICATIONS
+--------------------------------------------------------------------------------
+- Bachelor of Technology (B.Tech) in Computer Science & Engineering
+- Professional Cloud & AI Certified Practitioner
+- Enterprise Security & Data Ethics Certification
+
+================================================================================
+Generated via TalentGraph Enterprise Employee Record Vault
+================================================================================

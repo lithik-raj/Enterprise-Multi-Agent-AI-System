@@ -1,0 +1,31 @@
+Alex Rivers
+B.Tech Artificial Intelligence & Data Science
+Contact: alex.rivers@example.com | GitHub: github.com/alex-rivers-ai | LinkedIn: linkedin.com/in/alexrivers-ai
+
+PROFESSIONAL SUMMARY
+Aspiring AI/ML & Generative AI Engineer with solid foundations in Machine Learning, Deep Learning, Natural Language Processing, and Backend APIs. Proven hands-on experience building machine learning models, REST APIs with FastAPI, and data processing pipelines. Targeting AI Engineer, ML Engineer, and GenAI Intern roles.
+
+EDUCATION
+B.Tech in Artificial Intelligence & Data Science
+Grade: 8.9/10.0 (Core coursework: Machine Learning, Deep Learning, NLP, Data Structures & Algorithms, Database Systems)
+
+TECHNICAL SKILLS
+- Programming & Core: Python, SQL, C++, Git, Bash
+- Machine Learning & Data: Scikit-learn, Pandas, NumPy, Feature Engineering, Regression, Classification, Clustering
+- Natural Language Processing (NLP): spaCy, NLTK, TF-IDF, Word2Vec, Text Classification, Sentiment Analysis, Named Entity Recognition
+- Deep Learning: PyTorch, Neural Networks, CNNs
+- Software Engineering & APIs: FastAPI, Flask, REST APIs, Docker, SQLite, PostgreSQL
+
+PROJECTS
+1. Intelligent Text Classification & NLP Pipeline
+   - Developed end-to-end NLP text preprocessing and classification pipeline with spaCy and Scikit-learn TF-IDF.
+   - Evaluated accuracy, precision, and recall across multi-class benchmark datasets.
+   - Exposed predictions via high-throughput FastAPI REST endpoints.
+
+2. Predictive Machine Learning Modeling Engine
+   - Implemented supervised learning models using Scikit-learn for automated regression and classification.
+   - Integrated cross-validation, hyperparameter optimization, and feature importance explainability.
+
+3. Containerized AI Backend Service
+   - Built a modular FastAPI backend packaged with Docker.
+   - Integrated unit tests with pytest and CI/CD validation.

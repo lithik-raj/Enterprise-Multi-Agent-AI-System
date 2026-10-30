@@ -1,0 +1,45 @@
+{
+  "dataset": {
+    "path": "E:\\ADVANANCED ML PROJECTS\\Enterprise_Multi_Agent_AI\\data\\datasets\\resume_job_pairs.csv",
+    "samples": 20
+  },
+  "paradigms": {
+    "heuristic_baseline": {
+      "name": "Heuristic Formula Baseline",
+      "algorithm": "TF-IDF Cosine Similarity + Weighted Skill Overlap",
+      "r2_score": -0.9444,
+      "mae": 0.3686,
+      "rmse": 0.387,
+      "mean_latency_ms": 16.62,
+      "p95_latency_ms": 19.08,
+      "throughput_rps": 60.2,
+      "cost_per_1k_usd": 0.0,
+      "explainability": "High (Transparent algebraic formula)"
+    },
+    "trained_ml_model": {
+      "name": "Trained Scikit-Learn Model",
+      "algorithm": "GradientBoostingRegressor (100 Trees, 5 Features)",
+      "r2_score": 0.9999,
+      "mae": 0.0021,
+      "rmse": 0.0027,
+      "mean_latency_ms": 44.31,
+      "p95_latency_ms": 61.9,
+      "throughput_rps": 22.6,
+      "cost_per_1k_usd": 0.0,
+      "explainability": "High (Feature importance + tree weights)"
+    },
+    "llm_as_a_judge": {
+      "name": "LLM-as-a-Judge Evaluator",
+      "algorithm": "Gemini 1.5 Flash Reasoning Prompt",
+      "r2_score": 0.9812,
+      "mae": 0.0313,
+      "rmse": 0.0381,
+      "mean_latency_ms": 958.07,
+      "p95_latency_ms": 1177.38,
+      "throughput_rps": 1.0,
+      "cost_per_1k_usd": 2.4,
+      "explainability": "Moderate (Natural language chain-of-thought)"
+    }
+  },
+  "timestamp": "2026-10-28T18:23:38Z"
+}

@@ -1,0 +1,44 @@
+================================================================================
+SANJAY VERMA
+Employee ID: EMP-1010 | Official Email: sanjay.verma@enterprise.ai | Contact: +91 98410 12345
+Location: Delhi-NCR, India | Department: DevOps & Cloud
+Current Designation: Senior Site Reliability Engineer (SRE) | Joining Date: 2022-01-24
+Industry Experience: 6.0 Years
+================================================================================
+
+1. EXECUTIVE SUMMARY
+--------------------------------------------------------------------------------
+Site Reliability Engineer with 6 years orchestrating Kubernetes cluster telemetry, Datadog metric dashboards, automated auto-scaling rules, and incident post-mortem analysis.
+
+2. DAILY ROUTINE WORK & CORE RESPONSIBILITIES
+--------------------------------------------------------------------------------
+Monitors 99.99% platform uptime SLAs, conducts weekly chaos engineering simulations, investigates incident postmortems, and manages auto-scaling policies.
+
+3. TECHNICAL SKILLS & COMPETENCIES
+--------------------------------------------------------------------------------
+Core Competencies: Kubernetes | Grafana | Datadog | Chaos Engineering | Python | Shell Scripting | Docker
+Engineering Standards: Agile/Scrum, Git Workflows, Peer Code Reviews, CI/CD Integration
+Compliance & Governance: SOC2, ISO 27001, DPDP/GDPR Data Privacy Guidelines
+
+4. PROFESSIONAL EXPERIENCE & KEY ACHIEVEMENTS
+--------------------------------------------------------------------------------
+Role: Senior Site Reliability Engineer (SRE) — TalentGraph Enterprise Platform (2022 - Present)
+- Manages high-impact deliverables across the DevOps & Cloud division.
+- Collaborates cross-functionally with Product, AI Systems, and HR leadership.
+- Drives continuous optimization of internal workflows and latency benchmarks.
+- Mentors junior associates and contributes to weekly architectural reviews.
+
+Previous Role: Associate Systems Specialist — Tech Innovations Global (Prior)
+- Engineered scalable microservices and robust database integration layers.
+- Authored comprehensive test suites and automated deployment manifests.
+- Decreased system error rates by 35% through proactive telemetry and monitoring.
+
+5. EDUCATION & CERTIFICATIONS
+--------------------------------------------------------------------------------
+- Bachelor of Technology (B.Tech) in Computer Science & Engineering
+- Professional Cloud & AI Certified Practitioner
+- Enterprise Security & Data Ethics Certification
+
+================================================================================
+Generated via TalentGraph Enterprise Employee Record Vault
+================================================================================

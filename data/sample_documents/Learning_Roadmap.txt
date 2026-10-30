@@ -1,0 +1,44 @@
+Enterprise AI Engineering & Agentic Systems Curriculum
+Comprehensive Learning Roadmap & Technical Guide
+
+1. Large Language Models (LLM) Fundamentals
+- Architecture: Transformer self-attention mechanism, decoder-only vs encoder-decoder models.
+- Prompt Engineering: System instructions, role-prompting, few-shot in-context learning, and chain-of-thought reasoning.
+- Output Structuring: Constrained generation with Pydantic schemas, JSON mode, and schema validation.
+
+2. Dense Embeddings & Semantic Representation
+- Theory: Mapping words and document chunks to dense high-dimensional latent vectors (e.g. 384-dim with all-MiniLM-L6-v2).
+- Sentence Transformers: Bi-encoder architectures for asymmetric search and semantic similarity scoring.
+- Cosine Distance vs Euclidean L2 Distance metrics for vector comparisons.
+
+3. Vector Databases & Indexing
+- FAISS (Facebook AI Similarity Search): IndexFlatL2 for exact search, IndexIVFFlat for inverted file clustering, and IndexHNSW for approximate nearest neighbors.
+- Metadata storage, ID mapping, and index serialization for persistent vector stores.
+
+4. Retrieval-Augmented Generation (RAG) Architecture
+- Document Ingestion: Extracting raw text from PDF, DOCX, and TXT files.
+- Chunking Strategy: Recursive character splitting with token count limits (e.g. 512 tokens) and 10% overlap to preserve semantic context.
+- Top-K Semantic Retrieval: Query vector projection, distance sorting, and context window formatting.
+- Evidence Grounding: Instructing generative models to strictly cite retrieved excerpts and guard against hallucinations.
+
+5. LangGraph & Multi-Agent Orchestration
+- StateGraph: Defining typed state dicts (AgenticState) that flow across nodes.
+- Cyclic Workflows: Allowing agents to loop, request revisions, and conditionally branch based on execution outputs.
+- Supervisor-Worker Architecture: A central routing supervisor delegating to specialized workers (Research, NLP, ML, RAG, Evaluation).
+- Checkpointing: Using MemorySaver to persist execution trajectories and enable deterministic resume.
+
+6. Deterministic Tool Calling
+- Pydantic Schemas: Validating tool inputs and outputs before and after execution.
+- Function Calling: Enabling agents to choose tools dynamically to query external APIs, search companies, or compute ML predictions.
+
+7. Human-in-the-Loop (HITL) Governance
+- Interrupt-Before Pattern: Automatically pausing graph execution before high-stakes nodes or consequential outbound actions.
+- Human Approval Gates: Explicit approve/reject APIs that resume or cancel workflows.
+
+8. Automated Quality Evaluation & Guardrails
+- RAG Triad: Groundedness (faithfulness to context), Answer Relevance (addressing user query), and Completeness.
+- Safety Guardrails: Automated regex and pattern detection for toxic content, PII exposure, and bias.
+
+9. Production Deployment & Microservices
+- FastAPI: Asynchronous request handling, OpenAPI documentation, and typed response contracts.
+- Containerization: Multi-stage Docker packaging, health check probes (/api/health), and clean logging.

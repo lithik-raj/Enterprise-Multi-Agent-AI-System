@@ -1,0 +1,102 @@
+[
+  {
+    "id": "gold_001",
+    "name": "Alex Mercer",
+    "text": "Alex Mercer\nSenior AI Engineer\nalex.mercer@techmail.com | (555) 234-5678\n\nSummary:\nSenior AI Engineer with 6.0 years of experience designing and deploying scalable LLM and NLP systems.\n\nSkills:\nPython, PyTorch, LangGraph, FastAPI, Docker, PostgreSQL, RAG, Machine Learning\n\nExperience:\nStaff AI Architect | Nexus AI (2020 - 2026)\n- Built multi-agent reasoning workflows using LangGraph and FastAPI.\n\nEducation:\nMaster of Science in Artificial Intelligence, Stanford University (2020)",
+    "ground_truth": {
+      "name": "Alex Mercer",
+      "years_of_experience": 6.0,
+      "skills": ["Python", "Pytorch", "Langgraph", "Fastapi", "Docker", "Postgresql", "Rag", "Machine Learning"]
+    }
+  },
+  {
+    "id": "gold_002",
+    "name": "Elena Rostova",
+    "text": "Elena Rostova\nBackend Platform Engineer\nelena.rostova@cloudcorp.io\n\nProfessional Summary:\nDedicated Backend Developer with 5.0 years of experience building resilient microservices.\n\nTechnical Skills:\nPython, Django, Redis, PostgreSQL, Docker, Kubernetes, AWS, REST API, Git\n\nWork History:\nBackend Developer | Fintech Global (2021 - 2026)\n- Architected transaction pipeline in Python and PostgreSQL.\n\nEducation:\nBachelor of Science in Computer Science, MIT (2021)",
+    "ground_truth": {
+      "name": "Elena Rostova",
+      "years_of_experience": 5.0,
+      "skills": ["Python", "Django", "Redis", "Postgresql", "Docker", "Kubernetes", "Aws", "Rest Api", "Git"]
+    }
+  },
+  {
+    "id": "gold_003",
+    "name": "Marcus Vance",
+    "text": "Marcus Vance\nCloud DevOps Architect\nmarcus.vance@infranet.org\n\nSummary:\nCloud infrastructure engineer with 8.0 years of experience managing multi-region Kubernetes clusters.\n\nSkills:\nKubernetes, Docker, AWS, Azure, Linux, CI/CD, Git, Python, Terraform\n\nExperience:\nLead DevOps Specialist | CloudWave (2018 - 2026)\n- Automated production deployments across AWS and Azure.\n\nCertifications:\nAWS Certified Solutions Architect",
+    "ground_truth": {
+      "name": "Marcus Vance",
+      "years_of_experience": 8.0,
+      "skills": ["Kubernetes", "Docker", "Aws", "Azure", "Linux", "Ci/Cd", "Git", "Python"]
+    }
+  },
+  {
+    "id": "gold_004",
+    "name": "Priya Sharma",
+    "text": "Priya Sharma\nFull Stack Developer\npriya.sharma@webdev.com | +1 415-889-1234\n\nProfessional Overview:\nFull Stack Developer with 4.0 years of experience shipping high-traffic web applications.\n\nCore Competencies:\nReact, TypeScript, Node.js, JavaScript, Python, FastAPI, MongoDB, Tailwind, HTML, CSS\n\nEmployment History:\nFull Stack Engineer | Apex Studios (2022 - 2026)\n- Built user dashboards using React and TypeScript.\n\nEducation:\nB.Tech in Information Technology, IIT Delhi (2022)",
+    "ground_truth": {
+      "name": "Priya Sharma",
+      "years_of_experience": 4.0,
+      "skills": ["React", "Typescript", "Node.Js", "Javascript", "Python", "Fastapi", "Mongodb", "Tailwind", "Html", "Css"]
+    }
+  },
+  {
+    "id": "gold_005",
+    "name": "David Kim",
+    "text": "David Kim\nSenior Data Scientist\ndavid.kim@datalabs.ai\n\nSummary:\nData Scientist with 7.0 years of experience in predictive analytics and deep learning.\n\nSkills:\nPython, Pandas, NumPy, Scikit-Learn, TensorFlow, Deep Learning, SQL, Machine Learning\n\nWork Experience:\nSenior Data Scientist | Quant Solutions (2019 - 2026)\n- Developed churn forecasting algorithms in Python using Scikit-Learn.",
+    "ground_truth": {
+      "name": "David Kim",
+      "years_of_experience": 7.0,
+      "skills": ["Python", "Pandas", "Numpy", "Scikit-Learn", "Tensorflow", "Deep Learning", "Sql", "Machine Learning"]
+    }
+  },
+  {
+    "id": "gold_006",
+    "name": "Sophia Zhang",
+    "text": "Sophia Zhang\nNLP & LLM Research Engineer\nsophia.zhang@research.org\n\nSummary:\nResearcher with 3.5 years of experience evaluating retrieval-augmented generation models.\n\nExpertise:\nPython, NLP, LLM, PyTorch, LangChain, LangGraph, RAG, Transformers, Git\n\nExperience:\nAI Researcher | DeepTech Labs (2022 - 2026)\n- Built benchmark pipelines for LLM evaluation.",
+    "ground_truth": {
+      "name": "Sophia Zhang",
+      "years_of_experience": 3.5,
+      "skills": ["Python", "Nlp", "Llm", "Pytorch", "Langchain", "Langgraph", "Rag", "Git"]
+    }
+  },
+  {
+    "id": "gold_007",
+    "name": "Carlos Gomez",
+    "text": "Carlos Gomez\nDistributed Systems Engineer\ncarlos.gomez@systems.io\n\nSummary:\nBackend specialist with 9.0 years of experience building high-throughput microservices.\n\nSkills:\nGo, Python, Redis, PostgreSQL, Docker, Microservices, System Design, Distributed Systems\n\nExperience:\nSenior Infrastructure Engineer | ScaleCloud (2017 - 2026)\n- Designed distributed messaging layer handling 50k RPS.",
+    "ground_truth": {
+      "name": "Carlos Gomez",
+      "years_of_experience": 9.0,
+      "skills": ["Go", "Python", "Redis", "Postgresql", "Docker", "Microservices", "System Design", "Distributed Systems"]
+    }
+  },
+  {
+    "id": "gold_008",
+    "name": "Amina Bello",
+    "text": "Amina Bello\nFrontend Architect\namina.bello@designsys.com\n\nSummary:\nFrontend Developer with 5.0 years of experience creating responsive component libraries.\n\nSkills:\nReact, TypeScript, JavaScript, HTML, CSS, Tailwind, GraphQL, REST API\n\nExperience:\nLead Frontend Developer | UI Labs (2021 - 2026)\n- Built design system components used by 40+ engineering squads.",
+    "ground_truth": {
+      "name": "Amina Bello",
+      "years_of_experience": 5.0,
+      "skills": ["React", "Typescript", "Javascript", "Html", "Css", "Tailwind", "Graphql", "Rest Api"]
+    }
+  },
+  {
+    "id": "gold_009",
+    "name": "Ethan Wright",
+    "text": "Ethan Wright\nMachine Learning Infrastructure Engineer\nethan.wright@mlops.com\n\nSummary:\nMLOps Engineer with 6.0 years of experience deploying PyTorch models at scale.\n\nSkills:\nPython, PyTorch, Docker, Kubernetes, AWS, CI/CD, Machine Learning, Linux\n\nExperience:\nMLOps Lead | DataFlow Inc (2020 - 2026)\n- Deployed automated model training pipelines on Kubernetes.",
+    "ground_truth": {
+      "name": "Ethan Wright",
+      "years_of_experience": 6.0,
+      "skills": ["Python", "Pytorch", "Docker", "Kubernetes", "Aws", "Ci/Cd", "Machine Learning", "Linux"]
+    }
+  },
+  {
+    "id": "gold_010",
+    "name": "Hana Tanaka",
+    "text": "Hana Tanaka\nSenior Product Engineer\nhana.tanaka@producthub.jp\n\nSummary:\nSoftware Engineer with 8.0 years of experience leading cross-functional sprint teams.\n\nSkills:\nPython, FastAPI, React, TypeScript, PostgreSQL, Agile, Scrum, Product Management\n\nExperience:\nSenior Tech Lead | Tokyo Web Services (2018 - 2026)\n- Coordinated delivery of core enterprise SaaS platform.",
+    "ground_truth": {
+      "name": "Hana Tanaka",
+      "years_of_experience": 8.0,
+      "skills": ["Python", "Fastapi", "React", "Typescript", "Postgresql", "Agile", "Scrum", "Product Management"]
+    }
+  }
+]
