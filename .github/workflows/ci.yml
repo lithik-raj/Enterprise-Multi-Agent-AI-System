@@ -63,7 +63,13 @@ jobs:
           MOCK_EXTERNAL_APIS: "true"
           ENVIRONMENT: "test"
         run: |
-          python -m pytest tests/ -v --tb=short
+          python -m pytest tests/ -v --tb=short 2>&1 | tee pytest_output.log || {
+            echo "### Pytest Failure Details" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            tail -n 120 pytest_output.log >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            exit 1
+          }
 
   docker-build:
     name: Container Build & Health Probe Verification
