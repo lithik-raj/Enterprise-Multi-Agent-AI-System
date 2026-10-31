@@ -28,7 +28,7 @@ numpy>=1.26.0
 faiss-cpu>=1.8.0
 pypdf>=4.2.0
 python-docx>=1.1.0
-sentence-transformers>=3.0.0
+# sentence-transformers>=3.0.0      # optional / disabled on serverless to keep bundle < 500MB
 
 # ── Phase 8 (LangGraph) ────────────────────
 langgraph>=0.1.0

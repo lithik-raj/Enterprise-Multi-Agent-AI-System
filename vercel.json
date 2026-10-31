@@ -3,7 +3,8 @@
   "functions": {
     "api/index.py": {
       "maxDuration": 60,
-      "includeFiles": "frontend/**"
+      "includeFiles": "frontend/**",
+      "excludeFiles": "{tests/**,evals/**,docs/**,scripts/**,data/datasets/**,data/employee_resumes/**,uploads/**}"
     }
   },
   "rewrites": [
