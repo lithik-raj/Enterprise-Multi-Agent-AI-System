@@ -90,7 +90,11 @@ class BatchService:
 
         settings = get_settings()
         upload_dir = Path(settings.UPLOAD_DIR)
-        upload_dir.mkdir(parents=True, exist_ok=True)
+        try:
+            upload_dir.mkdir(parents=True, exist_ok=True)
+        except OSError:
+            upload_dir = Path("/tmp") / "uploads"
+            upload_dir.mkdir(parents=True, exist_ok=True)
 
         clean_slug = re.sub(r"[^a-z0-9]+", "-", candidate_name.lower()).strip("-")
         doc_id = f"resume-{clean_slug}"

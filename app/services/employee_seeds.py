@@ -412,14 +412,19 @@ def ensure_resumes_on_disk() -> Dict[str, str]:
     Saves all 20 individual employee resumes to `data/employee_resumes/` on disk.
     Returns mapping from employee_id to the created file path string.
     """
-    EMPLOYEE_RESUMES_DIR.mkdir(parents=True, exist_ok=True)
+    resumes_dir = EMPLOYEE_RESUMES_DIR
+    try:
+        resumes_dir.mkdir(parents=True, exist_ok=True)
+    except OSError:
+        resumes_dir = Path("/tmp") / "employee_resumes"
+        resumes_dir.mkdir(parents=True, exist_ok=True)
     mapping: Dict[str, str] = {}
 
     for emp in TWENTY_EMPLOYEES:
         emp_id = emp["employee_id"]
         safe_name = emp["name"].replace(" ", "_")
         filename = f"{emp_id}_{safe_name}_Resume.txt"
-        file_path = EMPLOYEE_RESUMES_DIR / filename
+        file_path = resumes_dir / filename
 
         resume_body = _generate_resume_text(
             emp_id=emp_id,

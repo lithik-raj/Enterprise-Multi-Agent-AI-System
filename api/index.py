@@ -18,5 +18,6 @@ os.environ.setdefault("ENVIRONMENT", "production")
 os.environ.setdefault("NO_BROWSER", "1")
 os.environ.setdefault("VERCEL", "1")
 os.environ.setdefault("DISABLE_SPACY", "1")
+os.environ.setdefault("DISABLE_TORCH", "1")
 
 from app.main import app  # noqa: E402, F401

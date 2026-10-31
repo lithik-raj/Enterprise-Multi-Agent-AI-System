@@ -68,9 +68,13 @@ async def upload_document(file: UploadFile = File(...)) -> UploadResponse:
             detail="Uploaded file is empty.",
         )
 
-    # Save to uploads directory
+    # Save to uploads directory (fallback to /tmp on serverless environments like Vercel)
     upload_dir = Path(settings.UPLOAD_DIR)
-    upload_dir.mkdir(parents=True, exist_ok=True)
+    try:
+        upload_dir.mkdir(parents=True, exist_ok=True)
+    except OSError:
+        upload_dir = Path("/tmp") / "uploads"
+        upload_dir.mkdir(parents=True, exist_ok=True)
 
     document_id = str(uuid.uuid4())
     # Store as <uuid>.<ext> to avoid filename collisions / path traversal risks
