@@ -50,6 +50,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          python -m spacy download en_core_web_sm || true
 
       - name: Verify ML Model Training & Artifacts
         run: |
@@ -62,7 +63,7 @@ jobs:
           MOCK_EXTERNAL_APIS: "true"
           ENVIRONMENT: "test"
         run: |
-          python -m pytest tests/ -v
+          python -m pytest tests/ -v --tb=short
 
   docker-build:
     name: Container Build & Health Probe Verification

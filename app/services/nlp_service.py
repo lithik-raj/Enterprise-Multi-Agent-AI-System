@@ -152,30 +152,30 @@ class NLPService:
         if not text:
             return {}
 
-        if self.nlp is not None:
-            doc = self.nlp(text)
-            entities = {}
-            for ent in doc.ents:
-                if ent.label_ not in entities:
-                    entities[ent.label_] = []
-                if ent.text not in entities[ent.label_]:
-                    entities[ent.label_].append(ent.text)
-            return entities
-
-        # Standalone heuristic NER for key entity types when spaCy native library is absent
-        import re
         entities: dict[str, list[str]] = {}
-        # Known common tech organizations
+        if self.nlp is not None and "ner" in getattr(self.nlp, "pipe_names", []):
+            try:
+                doc = self.nlp(text)
+                for ent in doc.ents:
+                    if ent.label_ not in entities:
+                        entities[ent.label_] = []
+                    if ent.text not in entities[ent.label_]:
+                        entities[ent.label_].append(ent.text)
+            except Exception as e:
+                logger.debug("spaCy entity extraction notice: %s", e)
+
+        # Standalone heuristic NER for key entity types (ensures resilience if spaCy model is blank/missing)
+        import re
         orgs = ["Google", "Microsoft", "Amazon", "Apple", "Meta", "OpenAI", "Anthropic", "IBM", "NVIDIA", "Netflix"]
         for org in orgs:
             if re.search(r"\b" + re.escape(org) + r"\b", text, re.IGNORECASE):
-                entities.setdefault("ORG", []).append(org)
-        # Known locations / GPE
+                if org not in entities.setdefault("ORG", []):
+                    entities["ORG"].append(org)
         gpes = ["London", "New York", "San Francisco", "Seattle", "Bengaluru", "Bangalore", "Berlin", "Paris", "Tokyo"]
         for gpe in gpes:
             if re.search(r"\b" + re.escape(gpe) + r"\b", text, re.IGNORECASE):
-                entities.setdefault("GPE", []).append(gpe)
-        # Currency amounts
+                if gpe not in entities.setdefault("GPE", []):
+                    entities["GPE"].append(gpe)
         money = re.findall(r"\$[\d,]+(?:\.\d+)?[MBKmbk]?", text)
         if money:
             entities["MONEY"] = money
