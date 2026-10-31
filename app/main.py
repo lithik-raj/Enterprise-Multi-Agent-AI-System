@@ -95,6 +95,23 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+@app.middleware("http")
+async def vercel_url_normalize_middleware(request, call_next):
+    """
+    Normalizes internal Vercel serverless function rewrite paths.
+    Vercel rewrites often route to `/api/index.py` or `/api/index`;
+    this maps root and subpath requests so FastAPI routers match correctly.
+    """
+    raw_path = request.scope.get("path", "")
+    if raw_path in ("/api/index.py", "/api/index", "/api/index/"):
+        request.scope["path"] = "/"
+    elif raw_path.startswith("/api/index.py/"):
+        request.scope["path"] = raw_path[len("/api/index.py"):]
+    elif raw_path.startswith("/api/index/"):
+        request.scope["path"] = raw_path[len("/api/index"):]
+    return await call_next(request)
+
 # ── Routers ───────────────────────────────────────────────────────────────────
 app.include_router(chat.router)
 app.include_router(tasks.router)
@@ -156,6 +173,59 @@ async def health_check():
 
 
 # ── Static files & Frontend UI ────────────────────────────────────────────────
-frontend_dir = Path(__file__).resolve().parent.parent / "frontend"
+from fastapi.responses import FileResponse, HTMLResponse
+
+
+def _find_frontend_dir() -> Path:
+    candidates = [
+        Path(__file__).resolve().parent.parent / "frontend",
+        Path.cwd() / "frontend",
+        Path("/var/task/frontend"),
+        Path("/var/task/api/frontend"),
+        Path(__file__).resolve().parent / "frontend",
+    ]
+    for p in candidates:
+        if p.exists() and (p / "index.html").exists():
+            return p
+    return candidates[0]
+
+
+frontend_dir = _find_frontend_dir()
+
+
+@app.get("/", include_in_schema=False)
+@app.get("/api/index.py", include_in_schema=False)
+@app.get("/api/index", include_in_schema=False)
+@app.get("/index.html", include_in_schema=False)
+async def serve_index():
+    """Serves the main single-page interactive recruitment demo application."""
+    idx = _find_frontend_dir() / "index.html"
+    if idx.exists():
+        return FileResponse(str(idx), media_type="text/html")
+    return HTMLResponse("<h1>Enterprise Multi-Agent AI Platform</h1><p>Demo loading...</p>")
+
+
+@app.get("/css/{filename:path}", include_in_schema=False)
+async def serve_css(filename: str):
+    """Serves styles and CSS assets."""
+    f = _find_frontend_dir() / "css" / filename
+    if f.exists():
+        return FileResponse(str(f), media_type="text/css")
+    return JSONResponse(status_code=404, content={"error": f"CSS asset {filename} not found"})
+
+
+@app.get("/js/{filename:path}", include_in_schema=False)
+async def serve_js(filename: str):
+    """Serves scripts, Three.js canvas, and client logic."""
+    f = _find_frontend_dir() / "js" / filename
+    if f.exists():
+        return FileResponse(str(f), media_type="application/javascript")
+    return JSONResponse(status_code=404, content={"error": f"JS asset {filename} not found"})
+
+
 if frontend_dir.exists():
-    app.mount("/", StaticFiles(directory=str(frontend_dir), html=True), name="frontend")
+    try:
+        app.mount("/frontend", StaticFiles(directory=str(frontend_dir), html=True), name="frontend_dir")
+        app.mount("/", StaticFiles(directory=str(frontend_dir), html=True), name="frontend_root")
+    except Exception:
+        pass

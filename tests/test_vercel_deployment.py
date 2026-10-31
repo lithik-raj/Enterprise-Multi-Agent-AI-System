@@ -34,6 +34,26 @@ def test_vercel_css_asset_serving():
     assert "text/css" in resp.headers.get("content-type", "")
 
 
+def test_vercel_js_asset_serving():
+    client = TestClient(app)
+    resp = client.get("/js/app.js")
+    assert resp.status_code == 200
+    assert "javascript" in resp.headers.get("content-type", "")
+
+
+def test_vercel_internal_rewrite_routes():
+    client = TestClient(app)
+    # Test that requests routed to /api/index.py or /api/index render the frontend live demo
+    resp_py = client.get("/api/index.py")
+    assert resp_py.status_code == 200
+    assert "text/html" in resp_py.headers.get("content-type", "")
+    assert "<!DOCTYPE html>" in resp_py.text
+
+    resp_idx = client.get("/api/index")
+    assert resp_idx.status_code == 200
+    assert "text/html" in resp_idx.headers.get("content-type", "")
+
+
 def test_vercel_json_configuration():
     vpath = Path(__file__).resolve().parent.parent / "vercel.json"
     assert vpath.exists(), "vercel.json must exist in repository root"
