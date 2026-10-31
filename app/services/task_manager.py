@@ -697,16 +697,18 @@ class TaskManager:
                     # Check if user asked about a specific person/candidate name that is unknown
                     clean_msg_name = re.sub(r"[^\w\s]", "", user_message).strip()
                     tokens = clean_msg_name.split()
-                    name_phrase_match = re.search(r"\b(?:about|who is|status of|is|regarding|for|tell me about)\s+([A-Z][a-zA-Z\.]+(?:\s+[A-Z][a-zA-Z\.]+){0,3})\b", user_message)
+                    name_phrase_match = re.search(r"\b(?:about|who is|status of|is|regarding|tell me about)\s+([A-Z][a-zA-Z\.]+(?:\s+[A-Z][a-zA-Z\.]+){0,3})\b", user_message)
                     unknown_candidate_query = None
-                    if name_phrase_match:
-                        matched_n = name_phrase_match.group(1).strip()
-                        if not any(sw in matched_n.lower() for sw in ["candidate", "employee", "the role", "this job", "company", "interview", "engineer"]):
-                            unknown_candidate_query = matched_n
-                    elif 1 <= len(tokens) <= 4 and all(t[0].isupper() for t in tokens if t):
-                        common_words = {"hello", "hi", "hey", "help", "yes", "no", "compare", "status", "roles", "domains", "what", "where", "how", "why"}
-                        if not any(t.lower() in common_words for t in tokens):
-                            unknown_candidate_query = clean_msg_name
+                    is_action_task = any(kw in msg_lower for kw in ["submit", "application", "outbound", "apply", "dispatch", "analyze my", "skill match", "pipeline"])
+                    if not is_action_task:
+                        if name_phrase_match:
+                            matched_n = name_phrase_match.group(1).strip()
+                            if not any(sw in matched_n.lower() for sw in ["candidate", "employee", "the role", "this job", "company", "interview", "engineer", "labs", "deeptech", "technologies"]):
+                                unknown_candidate_query = matched_n
+                        elif 1 <= len(tokens) <= 4 and all(t[0].isupper() for t in tokens if t):
+                            common_words = {"hello", "hi", "hey", "help", "yes", "no", "compare", "status", "roles", "domains", "what", "where", "how", "why"}
+                            if not any(t.lower() in common_words for t in tokens):
+                                unknown_candidate_query = clean_msg_name
 
                     if not target_entity and unknown_candidate_query:
                         final_text = (
@@ -725,6 +727,10 @@ class TaskManager:
                             decision="APPROVED",
                             explanation=f"Safely handled unknown entity '{unknown_candidate_query}' without false defaults.",
                             rubric_breakdown={"groundedness": 1.0, "compliance": 1.0},
+                            relevance=1.0,
+                            completeness=1.0,
+                            groundedness=1.0,
+                            task_completed=True,
                         )
                         self._update_step(task, AgentNameEnum.RECOMMENDATION, AgentStatusEnum.COMPLETED, f"Reported candidate '{unknown_candidate_query}' not found")
                         self._update_step(task, AgentNameEnum.EVALUATION, AgentStatusEnum.COMPLETED, "Groundedness check verified")

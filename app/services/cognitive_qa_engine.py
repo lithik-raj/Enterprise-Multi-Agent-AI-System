@@ -362,7 +362,7 @@ class CognitiveHRService:
             pend_pct = 100 - comp_pct
 
             work_compl = (
-                f"{comp_pct}% verified sprint milestone completion. Successfully shipped key operational deliverables in {routine[:120]}, "
+                f"{comp_pct}% ({comp_pct} percent) verified sprint milestone completion. Successfully shipped key operational deliverables in {routine[:120]}, "
                 f"passed all automated unit test suites, peer code review sign-offs, and vector benchmark verifications."
             )
             work_pend = (
@@ -596,7 +596,7 @@ class CognitiveHRService:
 
         comparison_lines = [
             f"Candidate Cohort Comparative Analysis for {target_role}:",
-            f"• Leader: {top.name} leads the cohort with {top_score:.1f}% compatibility ({top.experience_years}y exp). Verified strengths in {top_skills}. Status: {getattr(top, 'decision', 'Ready for Offer')}.",
+            f"• Top Leader: {top.name} leads the cohort with {top_score:.1f}% ({top_score:.1f} percent) compatibility score ({top.experience_years}y exp). Verified strengths in {top_skills}. Status: {getattr(top, 'decision', 'Ready for Offer')}.",
         ]
 
         if runner_up:

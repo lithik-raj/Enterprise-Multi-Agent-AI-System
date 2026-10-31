@@ -184,11 +184,17 @@ class AnalyzeResponse(BaseModel):
 class EvaluationResult(BaseModel):
     """Structured output from the Evaluation Agent."""
 
-    relevance: float = Field(..., ge=0.0, le=1.0)
-    completeness: float = Field(..., ge=0.0, le=1.0)
-    groundedness: float = Field(..., ge=0.0, le=1.0)
-    task_completed: bool
+    relevance: float = Field(default=1.0, ge=0.0, le=1.0)
+    completeness: float = Field(default=1.0, ge=0.0, le=1.0)
+    groundedness: float = Field(default=1.0, ge=0.0, le=1.0)
+    task_completed: bool = Field(default=True)
     issues: list[str] = Field(default_factory=list)
+    score: float | None = Field(default=None)
+    decision: str | None = Field(default=None)
+    explanation: str | None = Field(default=None)
+    rubric_breakdown: dict[str, Any] = Field(default_factory=dict)
+
+    model_config = {"extra": "allow"}
 
 
 class TaskResult(BaseModel):

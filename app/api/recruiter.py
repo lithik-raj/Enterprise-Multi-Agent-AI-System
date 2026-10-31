@@ -567,7 +567,7 @@ async def recruiter_voice_assist(req: VoiceAssistRequest) -> VoiceAssistResponse
     if batch and batch.leaderboard:
         job_title = detected_role or batch.job_title
         required_skills = batch.required_skills
-        candidates_list = batch.leaderboard
+        candidates_list = list(batch.leaderboard)
     else:
         sample_pool = batch_svc.get_extended_sample_candidates()
         job_title = detected_role or sample_pool.get("job_title", job_title)
@@ -584,6 +584,11 @@ async def recruiter_voice_assist(req: VoiceAssistRequest) -> VoiceAssistResponse
                     self.missing_skills = [s for s in required_skills if s not in self.matched_skills]
                     self.decision = "OFFER_EXTENDED" if self.predicted_score >= 0.85 else "SHORTLISTED" if self.predicted_score >= 0.70 else "PENDING"
                     self.match_category = "Strong Match" if self.predicted_score >= 0.70 else "Moderate Match"
+                    self.confidence = 0.90
+                    self.is_match = self.predicted_score >= 0.70
+                    matched_cnt = len([s for s in self.matched_skills if s in required_skills])
+                    self.overlap_ratio = matched_cnt / max(len(required_skills), 1)
+                    self.features = {}
             candidates_list.append(_MockCand(rc, idx + 1))
 
     # Also load all uploaded candidate records from uploads/*.meta.json into candidates_list
@@ -614,6 +619,11 @@ async def recruiter_voice_assist(req: VoiceAssistRequest) -> VoiceAssistResponse
                                 self.missing_skills = [s for s in required_skills if s not in skills]
                                 self.decision = "SHORTLISTED" if score >= 0.70 else "PENDING"
                                 self.match_category = "Strong Match" if score >= 0.70 else "Moderate Match"
+                                self.confidence = 0.90
+                                self.is_match = score >= 0.70
+                                matched_cnt = len([s for s in skills if s in required_skills])
+                                self.overlap_ratio = matched_cnt / max(len(required_skills), 1)
+                                self.features = {}
                         candidates_list.append(_UploadCand(disp_name, c_exp, c_skills, c_score))
             except Exception:
                 pass
@@ -675,6 +685,13 @@ async def recruiter_voice_assist(req: VoiceAssistRequest) -> VoiceAssistResponse
             detected_candidates.append(c)
         elif len(parts) == 1 and re.search(r"\b" + re.escape(parts[0]) + r"\b", q_search):
             detected_candidates.append(c)
+        elif not detected_emp and any(re.search(r"\b" + re.escape(p) + r"\b", q_search) for p in parts if len(p) >= 4):
+            detected_candidates.append(c)
+
+    # If some candidates matched their full name, prioritize them over partial name matches
+    full_matches = [c for c in detected_candidates if c.name.lower() in q_search]
+    if full_matches:
+        detected_candidates = full_matches
 
     if detected_candidates:
         detected_cand_obj = detected_candidates[0]
@@ -702,7 +719,7 @@ async def recruiter_voice_assist(req: VoiceAssistRequest) -> VoiceAssistResponse
 
     # ── Unknown Person Detection: if a name was asked but does not exist ─────
     queried_unknown_name = None
-    if not detected_emp and not detected_cand_obj:
+    if not detected_emp and not detected_cand_obj and not any(w in q_lower for w in ["compare", "comparing", "versus", "vs", "between", "rank", "leaderboard", "top candidate"]):
         system_keywords = {
             "ai", "ml", "platform", "engineer", "data", "scientist", "cloud", "devops", "architect",
             "full", "stack", "software", "development", "internship", "campus", "enterprise",
@@ -712,7 +729,8 @@ async def recruiter_voice_assist(req: VoiceAssistRequest) -> VoiceAssistResponse
             "who", "what", "where", "which", "how", "tell", "show", "give", "list", "check", "please",
             "candidate", "candidates", "employee", "employees", "company", "system", "role", "roles",
             "recruiter", "talent", "ranking", "benchmark", "market", "work", "status", "pending",
-            "chatbot", "chat", "bot", "assistant", "voice", "model", "performance", "correctly", "working"
+            "chatbot", "chat", "bot", "assistant", "voice", "model", "performance", "correctly", "working",
+            "compare", "comparing", "versus", "vs", "between", "and", "or", "both", "either", "sarah", "alex"
         }
         # Check for candidate / employee name phrases in clean query
         name_phrase_match = re.search(
@@ -818,10 +836,11 @@ async def recruiter_voice_assist(req: VoiceAssistRequest) -> VoiceAssistResponse
     # ── COGNITIVE BRANCH B: Work Status (Particular Work Completed, Still Pending Work, Active Status) ──
     is_work_inquiry = (
         any(it in intents for it in ["FULL_WORK_STATUS", "WORK_COMPLETED", "PENDING_WORK", "ACTIVE_STATUS"])
+        or ("completed" in q_search and "work" in q_search)
         or any(k in q_search for k in [
             "completed work", "particular work", "pending work", "still pending", "active status",
             "work completed", "work status", "work he completed", "work she completed", "what work",
-            "assigned work status", "work slip", "ticket slip", "tickets completed"
+            "assigned work", "assigned work status", "work slip", "ticket slip", "tickets completed"
         ])
     )
     if is_work_inquiry:
@@ -905,12 +924,22 @@ async def recruiter_voice_assist(req: VoiceAssistRequest) -> VoiceAssistResponse
 
     # ── COGNITIVE BRANCH E: Comparative Candidate Analysis ──
     is_comp_inquiry = (
-        "COMPARATIVE" in intents
-        or len(detected_candidates) >= 2
-        or any(k in q_search for k in [
-            "compare", "comparing", "who is better", "best and worst", "who performed worst",
-            "who is worst", "lowest candidate", "top and bottom", "leaderboard"
-        ])
+        not detected_emp
+        and (
+            "COMPARATIVE" in intents
+            or any(k in q_search for k in [
+                "compare", "comparing", "who is better", "best and worst", "who performed worst",
+                "who is worst", "lowest candidate", "top and bottom", "leaderboard"
+            ])
+            or (
+                len(detected_candidates) >= 2
+                and any(k in q_search for k in ["and", "versus", "vs", "between", "both"])
+                and not any(k in q_search for k in ["eligible", "eligibility", "suitable", "work", "status"])
+            )
+        )
+    ) or (
+        detected_emp
+        and any(k in q_search for k in ["compare", "comparing", "who is better", "best and worst", "vs", "versus"])
     )
     if is_comp_inquiry:
         is_bw = any(w in q_search for w in ["best and worst", "worst", "lowest", "poor", "bottom"])
@@ -1049,7 +1078,7 @@ async def recruiter_voice_assist(req: VoiceAssistRequest) -> VoiceAssistResponse
 
         # C. Suitability / Internal Mobility / Role Transition Evaluation
         elif any(w in q_lower for w in ["suitable", "suitability", "fit", "good for", "qualified", "eligible", "match", "mobility", "switch", "promote", "role"]):
-            if any(w in q_lower for w in ["data scientist", "data science", "analytics", "statistics"]):
+            if any(w in q_lower for w in ["data scientist", "data science", "analytics", "statistics", "scieintist", "scientist"]):
                 target_role = "data_scientist"
                 role_label = "Data Scientist"
             elif any(w in q_lower for w in ["ai", "ml", "machine learning", "deep learning", "langgraph", "nlp"]):
@@ -1082,7 +1111,7 @@ async def recruiter_voice_assist(req: VoiceAssistRequest) -> VoiceAssistResponse
             if score_val >= 70.0:
                 matched_str = ", ".join(matched_must[:4]) if matched_must else "required technical skills"
                 reply = (
-                    f"Eligible: Yes, {emp['name']} is eligible for the {role_label} role with a {score_val:.1f} percent compatibility match. "
+                    f"Eligible: Yes, {emp['name']} is suitable and eligible for the {role_label} role with a {score_val:.1f} percent compatibility match. "
                     f"With {emp['experience_years']} years experience and verified strengths in {matched_str}, "
                     f"they represent a premier internal mobility transfer."
                 )

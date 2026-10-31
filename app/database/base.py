@@ -24,15 +24,28 @@ settings = get_settings()
 def _resolve_db_url() -> str:
     """
     Converts DATABASE_URL for standard SQLAlchemy engine.
-    Ensures local directory exists for SQLite.
+    Ensures local directory exists for SQLite, falling back to /tmp if read-only (e.g. Vercel).
     """
+    import os
     url: str = settings.DATABASE_URL
     if url.startswith("sqlite+aiosqlite:///"):
         url = url.replace("sqlite+aiosqlite:///", "sqlite:///")
     if url.startswith("sqlite:///"):
         db_path_str = url.replace("sqlite:///", "")
+        if os.getenv("VERCEL") and not db_path_str.startswith("/tmp"):
+            db_path = Path("/tmp") / db_path_str.lstrip("./")
+            try:
+                db_path.parent.mkdir(parents=True, exist_ok=True)
+                return f"sqlite:///{db_path}"
+            except Exception:
+                pass
         db_path = Path(db_path_str)
-        db_path.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            db_path.parent.mkdir(parents=True, exist_ok=True)
+        except OSError:
+            db_path = Path("/tmp") / db_path.name
+            db_path.parent.mkdir(parents=True, exist_ok=True)
+            return f"sqlite:///{db_path}"
         return f"sqlite:///{db_path_str}"
     return url
 

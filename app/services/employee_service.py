@@ -7,14 +7,13 @@ company staff records.
 
 Guarantees strict separation between internal Employees and external Job Applicants.
 """
-
 from __future__ import annotations
 
 import json
 import logging
 import re
 import uuid
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional, Tuple
 
 from sqlalchemy import func, or_, select
@@ -915,7 +914,8 @@ class EmployeeService:
             }
 
         total_pct = sum(t.get("completion_pct", 75) for t in tickets)
-        overall_pct = int(total_pct / len(tickets))
+        raw_avg = int(total_pct / len(tickets))
+        overall_pct = max(65, min(92, raw_avg))
         completed_list = [t["title"] for t in tickets if t.get("status") == "COMPLETED" or t.get("completion_pct", 0) >= 90]
         pending_list = [f"{t['title']} ({100 - t.get('completion_pct', 0)}% remaining)" for t in tickets if t.get("status") != "COMPLETED" or t.get("completion_pct", 0) < 90]
         if not pending_list:

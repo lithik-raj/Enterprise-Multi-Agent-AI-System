@@ -25,8 +25,8 @@ def open_platform_browser(url: str, force: bool = False) -> bool:
     if _BROWSER_LAUNCHED and not force:
         return True
 
-    # Check if disabled via environment variable
-    if os.getenv("NO_BROWSER", "0").lower() in ("1", "true", "yes"):
+    # Check if disabled via environment variable or in serverless environments
+    if os.getenv("VERCEL") or os.getenv("NO_BROWSER", "0").lower() in ("1", "true", "yes"):
         return False
 
     _BROWSER_LAUNCHED = True

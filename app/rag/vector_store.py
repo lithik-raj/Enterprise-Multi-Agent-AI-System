@@ -28,8 +28,16 @@ class VectorStore:
             raise RuntimeError("faiss is not installed. Run: pip install faiss-cpu") from exc
             
         self.dimension = dimension
-        self.store_dir = Path(settings.VECTOR_STORE_DIR)
-        self.store_dir.mkdir(parents=True, exist_ok=True)
+        target_dir = Path(settings.VECTOR_STORE_DIR)
+        try:
+            target_dir.mkdir(parents=True, exist_ok=True)
+            self.store_dir = target_dir
+        except OSError:
+            self.store_dir = Path("/tmp") / target_dir.name
+            try:
+                self.store_dir.mkdir(parents=True, exist_ok=True)
+            except Exception:
+                pass
         
         self.index_path = self.store_dir / "index.faiss"
         self.meta_path = self.store_dir / "meta.json"
@@ -65,9 +73,13 @@ class VectorStore:
         
     def _save(self):
         """Persist index and metadata to disk."""
-        self.faiss.write_index(self.index, str(self.index_path))
-        with open(self.meta_path, "w", encoding="utf-8") as f:
-            json.dump(self.metadata, f, indent=2)
+        try:
+            self.store_dir.mkdir(parents=True, exist_ok=True)
+            self.faiss.write_index(self.index, str(self.index_path))
+            with open(self.meta_path, "w", encoding="utf-8") as f:
+                json.dump(self.metadata, f, indent=2)
+        except OSError as e:
+            logger.debug("Vector store save skipped in read-only environment: %s", e)
 
     def add_chunks(self, document_id: str, chunks: list[str], embeddings: list[list[float]]):
         """Add chunks to the vector store."""

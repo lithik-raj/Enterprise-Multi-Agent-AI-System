@@ -1,0 +1,12 @@
+.git
+.github
+.pytest_cache
+__pycache__
+*.pyc
+*.pyo
+tests/
+evals/
+data/app.db
+data/vector_store/faiss_index.bin.bak*
+uploads/*.pdf
+uploads/*.txt

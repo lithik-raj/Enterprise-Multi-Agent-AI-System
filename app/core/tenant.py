@@ -10,7 +10,9 @@ from __future__ import annotations
 import contextvars
 from typing import Optional, Any
 from fastapi import Header, HTTPException, status
+from sqlalchemy import select
 from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
 # Thread/coroutine-safe context variable for the active tenant
 _tenant_context: contextvars.ContextVar[Optional[str]] = contextvars.ContextVar("tenant_id", default=None)

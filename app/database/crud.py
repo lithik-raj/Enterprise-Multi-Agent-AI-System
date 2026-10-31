@@ -9,8 +9,8 @@ the database — they are the data-access layer (DAL).
 Each function accepts an AsyncSession and returns ORM objects or None.
 Callers are responsible for committing/rolling back via the session.
 """
-
 from __future__ import annotations
+from sqlalchemy.ext.asyncio import AsyncSession
 
 import logging
 from datetime import datetime
