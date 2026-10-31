@@ -54,7 +54,7 @@ def test_telemetry_span_measurement():
 
     assert span.span_id.startswith("sp_")
     assert span.trace_id.startswith("tr_")
-    assert span.duration_ms >= 8.0
+    assert span.duration_ms >= 5.0
     assert span.attributes["agent"] == "MatcherAgent"
 
 

@@ -7,6 +7,11 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 def _get_client_or_url():
+    import os
+    if os.getenv("CI") or os.getenv("ENVIRONMENT") == "test":
+        from fastapi.testclient import TestClient
+        from app.main import app
+        return "testclient", TestClient(app)
     import urllib.request
     base = "http://127.0.0.1:8000"
     try:
