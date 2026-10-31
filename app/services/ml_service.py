@@ -17,6 +17,9 @@ logger = logging.getLogger(__name__)
 
 class MLService:
     def __init__(self):
+        self.vectorizer = None
+        self.cosine_similarity = None
+        self.np = None
         try:
             from sklearn.feature_extraction.text import TfidfVectorizer
             from sklearn.metrics.pairwise import cosine_similarity
@@ -24,12 +27,10 @@ class MLService:
             self.TfidfVectorizer = TfidfVectorizer
             self.cosine_similarity = cosine_similarity
             self.np = np
-        except ImportError as exc:
-            raise RuntimeError("scikit-learn or numpy is not installed. Run: pip install scikit-learn numpy") from exc
-        
-        # Instantiate a reusable vectorizer with english stop words
-        self.vectorizer = self.TfidfVectorizer(stop_words="english")
-        logger.info("MLService initialised with Scikit-learn TF-IDF")
+            self.vectorizer = self.TfidfVectorizer(stop_words="english")
+            logger.info("MLService initialised with Scikit-learn TF-IDF")
+        except Exception as exc:
+            logger.info("Scikit-learn not available (%s); operating in resilient standalone TF-IDF mode.", exc)
 
     def calculate_text_similarity(self, text1: str, text2: str) -> float:
         """
@@ -39,21 +40,29 @@ class MLService:
         if not text1 or not text2:
             return 0.0
             
-        try:
-            # Fit and transform the two texts
-            tfidf_matrix = self.vectorizer.fit_transform([text1, text2])
-            
-            # Calculate cosine similarity between the first item (index 0) and second (index 1)
-            sim_matrix = self.cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[1:2])
-            
-            # Extract scalar
-            similarity_score = float(sim_matrix[0][0])
-            
-            # Clip between 0 and 1 just in case of float imprecision
-            return max(0.0, min(1.0, similarity_score))
-        except Exception as e:
-            logger.error("Failed to calculate text similarity: %s", e)
+        if self.vectorizer is not None and self.cosine_similarity is not None:
+            try:
+                tfidf_matrix = self.vectorizer.fit_transform([text1, text2])
+                sim_matrix = self.cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[1:2])
+                return max(0.0, min(1.0, float(sim_matrix[0][0])))
+            except Exception as e:
+                logger.debug("Sklearn vectorizer error (%s); falling back to standalone cosine sim", e)
+
+        # Resilient standalone token cosine similarity (zero scipy/sklearn dependencies)
+        import math
+        import re
+        from collections import Counter
+        words1 = re.findall(r"\w+", text1.lower())
+        words2 = re.findall(r"\w+", text2.lower())
+        if not words1 or not words2:
             return 0.0
+        c1, c2 = Counter(words1), Counter(words2)
+        intersection = set(c1.keys()) & set(c2.keys())
+        numerator = sum(c1[w] * c2[w] for w in intersection)
+        sum1 = sum(c1[w] ** 2 for w in c1.keys())
+        sum2 = sum(c2[w] ** 2 for w in c2.keys())
+        denominator = math.sqrt(sum1) * math.sqrt(sum2)
+        return float(numerator / denominator) if denominator else 0.0
 
     def calculate_skill_overlap(self, resume_skills: list[str], job_skills: list[str]) -> dict[str, Any]:
         """

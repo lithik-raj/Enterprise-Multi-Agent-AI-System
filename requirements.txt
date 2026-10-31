@@ -1,6 +1,6 @@
 # ── Phase 1: Core API framework ───────────────────────────────────────────────
 fastapi>=0.111.0
-uvicorn[standard]>=0.29.0
+uvicorn>=0.29.0
 pydantic>=2.7.0
 pydantic-settings>=2.2.0
 python-dotenv>=1.0.0
@@ -21,7 +21,7 @@ google-generativeai>=0.7.0
 # keybert>=0.8.0
 
 # ── Phase 5 (ML) ───────────────────────────
-scikit-learn>=1.5.0
+# scikit-learn>=1.5.0     # bypassed on serverless to exclude 150MB scipy; uses pure numpy
 numpy>=1.26.0
 
 # ── Phase 6 (RAG) ──────────────────────────
