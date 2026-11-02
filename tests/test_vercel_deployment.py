@@ -66,10 +66,16 @@ def test_vercel_json_configuration():
 
 def test_vercel_matched_path_rewrites():
     client = TestClient(app)
+    # When Vercel rewrites to /api/index.py?path=/api/...
+    health_query = client.get("/api/index.py?path=/api/health")
+    assert health_query.status_code == 200
+    assert health_query.json().get("status") == "ok"
+
     # When Vercel rewrites to /api/index.py with x-forwarded-uri header (standard proxy behavior)
     health_fwd = client.get("/api/index.py", headers={"x-forwarded-uri": "/api/health"})
     assert health_fwd.status_code == 200
     assert health_fwd.json().get("status") == "ok"
+
 
     # When Vercel rewrites to /api/index.py with x-matched-path header
     css_resp = client.get("/api/index.py", headers={"x-matched-path": "/css/styles.css"})

@@ -10,7 +10,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/api/index.py"
+      "destination": "/api/index.py?path=/api/$1"
     },
     {
       "source": "/((?!css/|js/|favicon\\.ico|.*\\.html|.*\\.css|.*\\.js).*)",
@@ -18,4 +18,5 @@
     }
   ]
 }
+
 

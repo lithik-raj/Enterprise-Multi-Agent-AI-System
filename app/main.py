@@ -100,12 +100,14 @@ app.add_middleware(
 async def vercel_url_normalize_middleware(request, call_next):
     """
     Normalizes internal Vercel serverless function rewrite paths.
-    Prioritizes x-forwarded-uri / x-forwarded-path (the original client URI)
+    Prioritizes ?path= query param, x-forwarded-uri, and x-forwarded-path
     so endpoints like /api/health, /api/chat, and /api/tasks match correctly on Vercel.
     """
     raw_path = request.scope.get("path", "")
+    query_path = request.query_params.get("path") or request.query_params.get("__path__")
     client_uri = (
-        request.headers.get("x-forwarded-uri")
+        query_path
+        or request.headers.get("x-forwarded-uri")
         or request.headers.get("x-forwarded-path")
         or request.headers.get("x-vercel-matched-path")
     )
@@ -126,13 +128,8 @@ async def vercel_url_normalize_middleware(request, call_next):
         request.scope["path"] = raw_path[len("/api/index.py"):]
     elif raw_path.startswith("/api/index/"):
         request.scope["path"] = raw_path[len("/api/index"):]
-    response = await call_next(request)
-    response.headers["x-debug-raw-path"] = str(raw_path)
-    response.headers["x-debug-scope-path"] = str(request.scope.get("path", ""))
-    for h in ("x-matched-path", "x-vercel-matched-path", "x-forwarded-uri", "x-forwarded-path", "x-now-route-matches"):
-        if h in request.headers:
-            response.headers[f"x-debug-{h}"] = str(request.headers[h])
-    return response
+    return await call_next(request)
+
 
 
 
@@ -263,12 +260,8 @@ async def serve_js(filename: str):
 
 for d in _find_frontend_dirs():
     try:
-        app.mount(f"/{d.name}", StaticFiles(directory=str(d), html=True), name=f"{d.name}_dir")
+        app.mount(f"/{d.name}", StaticFiles(directory=str(d), html=False), name=f"{d.name}_dir")
     except Exception:
         pass
-if frontend_dir.exists():
-    try:
-        app.mount("/", StaticFiles(directory=str(frontend_dir), html=True), name="frontend_root")
-    except Exception:
-        pass
+
 
