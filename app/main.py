@@ -126,7 +126,14 @@ async def vercel_url_normalize_middleware(request, call_next):
         request.scope["path"] = raw_path[len("/api/index.py"):]
     elif raw_path.startswith("/api/index/"):
         request.scope["path"] = raw_path[len("/api/index"):]
-    return await call_next(request)
+    response = await call_next(request)
+    response.headers["x-debug-raw-path"] = str(raw_path)
+    response.headers["x-debug-scope-path"] = str(request.scope.get("path", ""))
+    for h in ("x-matched-path", "x-vercel-matched-path", "x-forwarded-uri", "x-forwarded-path", "x-now-route-matches"):
+        if h in request.headers:
+            response.headers[f"x-debug-{h}"] = str(request.headers[h])
+    return response
+
 
 
 
