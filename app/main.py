@@ -100,18 +100,25 @@ app.add_middleware(
 async def vercel_url_normalize_middleware(request, call_next):
     """
     Normalizes internal Vercel serverless function rewrite paths.
-    Vercel rewrites often route to `/api/index.py` or `/api/index`;
-    this maps root, asset (/css, /js), and subpath requests so FastAPI routers match correctly.
+    Prioritizes x-forwarded-uri / x-forwarded-path (the original client URI)
+    so endpoints like /api/health, /api/chat, and /api/tasks match correctly on Vercel.
     """
     raw_path = request.scope.get("path", "")
-    matched_header = (
-        request.headers.get("x-matched-path")
+    client_uri = (
+        request.headers.get("x-forwarded-uri")
+        or request.headers.get("x-forwarded-path")
         or request.headers.get("x-vercel-matched-path")
-        or request.headers.get("x-forwarded-uri")
     )
-    if raw_path in ("/api/index.py", "/api/index", "/api/index/"):
-        if matched_header and not matched_header.startswith(("/api/index.py", "/api/index")):
-            target_path = matched_header.split("?")[0]
+    if client_uri:
+        target_path = client_uri.split("?")[0]
+        if target_path and target_path not in ("/api/index.py", "/api/index", "/api/index/"):
+            request.scope["path"] = target_path if target_path.startswith("/") else f"/{target_path}"
+        elif raw_path in ("/api/index.py", "/api/index", "/api/index/"):
+            request.scope["path"] = "/"
+    elif raw_path in ("/api/index.py", "/api/index", "/api/index/"):
+        x_match = request.headers.get("x-matched-path", "")
+        if x_match and not x_match.startswith(("/api/index.py", "/api/index")):
+            target_path = x_match.split("?")[0]
             request.scope["path"] = target_path if target_path.startswith("/") else f"/{target_path}"
         else:
             request.scope["path"] = "/"
@@ -120,6 +127,7 @@ async def vercel_url_normalize_middleware(request, call_next):
     elif raw_path.startswith("/api/index/"):
         request.scope["path"] = raw_path[len("/api/index"):]
     return await call_next(request)
+
 
 
 # ── Routers ───────────────────────────────────────────────────────────────────

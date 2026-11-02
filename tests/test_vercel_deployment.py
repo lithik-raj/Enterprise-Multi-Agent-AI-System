@@ -66,7 +66,12 @@ def test_vercel_json_configuration():
 
 def test_vercel_matched_path_rewrites():
     client = TestClient(app)
-    # When Vercel rewrites to /api/index.py with x-matched-path header, verify exact routing
+    # When Vercel rewrites to /api/index.py with x-forwarded-uri header (standard proxy behavior)
+    health_fwd = client.get("/api/index.py", headers={"x-forwarded-uri": "/api/health"})
+    assert health_fwd.status_code == 200
+    assert health_fwd.json().get("status") == "ok"
+
+    # When Vercel rewrites to /api/index.py with x-matched-path header
     css_resp = client.get("/api/index.py", headers={"x-matched-path": "/css/styles.css"})
     assert css_resp.status_code == 200
     assert "text/css" in css_resp.headers.get("content-type", "")
@@ -78,6 +83,7 @@ def test_vercel_matched_path_rewrites():
     health_resp = client.get("/api/index.py", headers={"x-matched-path": "/api/health"})
     assert health_resp.status_code == 200
     assert health_resp.json().get("status") == "ok"
+
 
 
 def test_public_directory_assets_exist():
