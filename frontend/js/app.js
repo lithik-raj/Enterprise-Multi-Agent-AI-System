@@ -7223,10 +7223,11 @@ CORE SKILLS:
   function loadSecurityPrivacyTab() {
     const term = document.getElementById("sec-audit-terminal");
     const runBtn = document.getElementById("sec-run-full-audit-btn");
-    const piiBtn = document.getElementById("sec-tool-pii-btn");
-    const injectBtn = document.getElementById("sec-tool-inject-btn");
-    const tamperBtn = document.getElementById("sec-tool-tamper-btn");
-    const purgeBtn = document.getElementById("sec-tool-purge-btn");
+    const piiBtn = document.getElementById("sec-tool-pii-btn") || document.getElementById("sec-inspect-pii-btn");
+    const injectBtn = document.getElementById("sec-tool-inject-btn") || document.getElementById("sec-run-injection-scan-btn");
+    const tamperBtn = document.getElementById("sec-tool-tamper-btn") || document.getElementById("sec-verify-hashes-btn");
+    const purgeBtn = document.getElementById("sec-tool-purge-btn") || document.getElementById("sec-run-dpdp-audit-btn");
+
 
     function logTerminal(msg) {
       if (!term) return;

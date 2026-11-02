@@ -65,6 +65,25 @@
         </p>
       </div>
 
+      <!-- 1-Click Demo Credentials Quick Fill Pills -->
+      <div class="auth-demo-pills" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; justify-content:center;">
+        <button type="button" id="btn-fill-hr-admin" class="btn-demo-pill" title="Fill HR Admin Credentials">
+          <span>👤</span> <span>HR Admin (hr.admin@gmail.com)</span>
+        </button>
+        <button type="button" id="btn-fill-recruiter" class="btn-demo-pill" title="Fill Recruiter Credentials">
+          <span>🎯</span> <span>Recruiter (recruiter@talentgraph.ai)</span>
+        </button>
+        <button type="button" id="btn-copy-pass" class="btn-demo-pill" title="Copy Demo Password to Clipboard">
+          <span>📋</span> <span>Copy Password</span>
+        </button>
+      </div>
+
+      <!-- Auth Tab Switcher (Sign In vs Register Account) -->
+      <div class="auth-tab-bar" style="display:flex; border-bottom:1px solid rgba(255,255,255,0.12); margin-bottom:18px;">
+        <button type="button" id="auth-tab-signin" class="auth-tab-btn active">Sign In</button>
+        <button type="button" id="auth-tab-signup" class="auth-tab-btn">Register New Account</button>
+      </div>
+
       <!-- Sign In Form -->
       <form id="hr-login-form" class="auth-form" autocomplete="on">
         <div class="auth-input-group">
@@ -104,6 +123,57 @@
         </button>
 
         <div id="hr-login-error" class="auth-error-banner" style="display:none; font-weight:600; text-align:center;"></div>
+      </form>
+
+      <!-- Sign Up Form (Phase 24 Account Provisioning) -->
+      <form id="hr-signup-form" class="auth-form" style="display:none;" autocomplete="on">
+        <div class="auth-input-group">
+          <label for="hr-signup-name" class="auth-input-label">Full Name</label>
+          <div class="auth-input-wrapper">
+            <span class="auth-input-icon">👤</span>
+            <input type="text" id="hr-signup-name" class="auth-form-control" placeholder="e.g. Sarah Jenkins" required>
+          </div>
+        </div>
+
+        <div class="auth-input-group">
+          <label for="hr-signup-email" class="auth-input-label">Work Email ID</label>
+          <div class="auth-input-wrapper">
+            <span class="auth-input-icon">✉️</span>
+            <input type="email" id="hr-signup-email" class="auth-form-control" placeholder="e.g. recruiter@enterprise.com" required autocomplete="username">
+          </div>
+        </div>
+
+        <div class="auth-input-group">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <label for="hr-signup-password" class="auth-input-label">Access Password</label>
+            <span style="font-size:11px; color:var(--text-muted);">Min. 6 Characters</span>
+          </div>
+          <div class="auth-input-wrapper">
+            <span class="auth-input-icon">🔑</span>
+            <input type="password" id="hr-signup-password" class="auth-form-control" placeholder="Create secure password" required autocomplete="new-password">
+          </div>
+        </div>
+
+        <div class="auth-input-group">
+          <label for="hr-signup-role" class="auth-input-label">Enterprise Role</label>
+          <div class="auth-input-wrapper">
+            <span class="auth-input-icon">🏷️</span>
+            <select id="hr-signup-role" class="auth-form-control" style="background:#0f172a; color:#e2e8f0;">
+              <option value="recruiter" selected>Technical Talent Recruiter</option>
+              <option value="hr_manager">HR Hiring Manager</option>
+              <option value="admin">Platform Administrator</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" id="hr-signup-submit-btn" class="btn-auth-submit" style="margin-top:16px;">
+          <span class="submit-icon">✨</span>
+          <span class="submit-text">Create Account &amp; Enter Dashboard</span>
+          <span class="submit-arrow">➔</span>
+        </button>
+
+        <div id="hr-signup-error" class="auth-error-banner" style="display:none; font-weight:600; text-align:center; margin-top:12px;"></div>
+        <div id="hr-signup-success" class="auth-success-banner" style="display:none; font-weight:600; text-align:center; margin-top:12px; color:#34d399; background:rgba(16,185,129,0.12); padding:10px; border-radius:8px; border:1px solid rgba(16,185,129,0.3);"></div>
       </form>
 
       <!-- Trust & Security Badges -->
@@ -232,6 +302,11 @@
               <span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span>
             </span>
             <span>🎙️ AI Voice Assistant</span>
+          </button>
+          <!-- Azure OpenAI / LLM API Key Status & Config Pill -->
+          <button type="button" class="azure-topbar-pill" id="azure-topbar-pill" title="Configure Azure OpenAI / LLM API Key & Model Settings">
+            <span class="azure-pill-dot"></span>
+            <span id="azure-pill-label">Connect Azure AI</span>
           </button>
           <div class="health-pill" id="health-status-badge">
             <span class="pulse-dot" style="width:6px; height:6px;"></span>
@@ -620,6 +695,17 @@
 
             <!-- Main chat window -->
             <div class="chat-main">
+              <!-- Chat Model Status Banner & Key Config Action -->
+              <div class="chat-model-banner" style="display:flex; justify-content:space-between; align-items:center; padding:10px 16px; border-bottom:1px solid rgba(255,255,255,0.08); background:rgba(0,0,0,0.22); flex-wrap:wrap; gap:8px;">
+                <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                  <span class="chat-model-badge" id="chat-model-badge">⚡ Azure OpenAI Ready</span>
+                  <span class="chat-model-details" id="chat-model-details" style="font-size:12px; color:var(--text-muted);">Offline / Connect API key for GPT-4o career advice</span>
+                </div>
+                <button type="button" class="btn-outline" id="chat-configure-azure-btn" style="padding:4px 10px; font-size:11.5px; border-radius:6px;">
+                  ⚙️ Configure Azure AI
+                </button>
+              </div>
+
               <div class="chat-messages" id="chat-messages">
                 <div class="chat-message assistant">
                   <div class="chat-avatar">🤖</div>
@@ -1940,7 +2026,11 @@ We would love to invite you to a 45-minute technical conversation with our platf
                 <span class="metric-icon">📦</span>
               </div>
               <div class="metric-value" id="rcv-stat-count" data-testid="rcv-stat-count" style="color:var(--accent-rose);"><span id="rcv-stat-total">0</span> Items</div>
-              <div class="metric-sub">Soft-Deleted Records</div>
+              <div class="metric-sub" style="display:flex; gap:8px; font-size:11.5px; align-items:center;">
+                <span>Candidates: <strong id="rcv-stat-candidates" style="color:#fff;">0</strong></span>
+                <span>•</span>
+                <span>Staff: <strong id="rcv-stat-staff" style="color:#fff;">0</strong></span>
+              </div>
             </div>
             <div class="metric-card">
               <div class="metric-header">
@@ -2037,7 +2127,7 @@ We would love to invite you to a 45-minute technical conversation with our platf
               <div style="background:rgba(0,0,0,0.3); padding:8px 12px; border-radius:6px; font-family:var(--font-mono); font-size:11px; color:#34d399; margin-bottom:12px;">
                 ✓ 100% PII Guardrails Active
               </div>
-              <button type="button" class="btn-outline" id="sec-inspect-pii-btn" style="width:100%; font-size:12px; padding:7px;">
+              <button type="button" class="btn-outline" id="sec-tool-pii-btn" data-legacy-id="sec-inspect-pii-btn" style="width:100%; font-size:12px; padding:7px;">
                 👁️ View Redacted PII Sample
               </button>
             </div>
@@ -2057,7 +2147,7 @@ We would love to invite you to a 45-minute technical conversation with our platf
               <div style="background:rgba(0,0,0,0.3); padding:8px 12px; border-radius:6px; font-family:var(--font-mono); font-size:11px; color:var(--accent-cyan); margin-bottom:12px;">
                 ✓ Adversarial Risk Score: 0.00 (Safe)
               </div>
-              <button type="button" class="btn-outline" id="sec-run-injection-scan-btn" style="width:100%; font-size:12px; padding:7px;">
+              <button type="button" class="btn-outline" id="sec-tool-inject-btn" data-legacy-id="sec-run-injection-scan-btn" style="width:100%; font-size:12px; padding:7px;">
                 🔍 Run Injection Defense Check
               </button>
             </div>
@@ -2077,7 +2167,7 @@ We would love to invite you to a 45-minute technical conversation with our platf
               <div style="background:rgba(0,0,0,0.3); padding:8px 12px; border-radius:6px; font-family:var(--font-mono); font-size:11px; color:#a78bfa; margin-bottom:12px;">
                 ✓ SHA-256 Tamper Check: Verified
               </div>
-              <button type="button" class="btn-outline" id="sec-verify-hashes-btn" style="width:100%; font-size:12px; padding:7px;">
+              <button type="button" class="btn-outline" id="sec-tool-tamper-btn" data-legacy-id="sec-verify-hashes-btn" style="width:100%; font-size:12px; padding:7px;">
                 🔒 Verify Document Hashes
               </button>
             </div>
@@ -2097,7 +2187,7 @@ We would love to invite you to a 45-minute technical conversation with our platf
               <div style="background:rgba(0,0,0,0.3); padding:8px 12px; border-radius:6px; font-family:var(--font-mono); font-size:11px; color:#fde047; margin-bottom:12px;">
                 ✓ 7-Day Soft-Delete Vault Active
               </div>
-              <button type="button" class="btn-outline" id="sec-run-dpdp-audit-btn" style="width:100%; font-size:12px; padding:7px;">
+              <button type="button" class="btn-outline" id="sec-tool-purge-btn" data-legacy-id="sec-run-dpdp-audit-btn" style="width:100%; font-size:12px; padding:7px;">
                 📋 Export Compliance Audit
               </button>
             </div>

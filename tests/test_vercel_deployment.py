@@ -62,3 +62,55 @@ def test_vercel_json_configuration():
     assert vcfg.get("version") == 2
     assert "rewrites" in vcfg
     assert any(r.get("destination") == "/api/index.py" for r in vcfg["rewrites"])
+
+
+def test_vercel_matched_path_rewrites():
+    client = TestClient(app)
+    # When Vercel rewrites to /api/index.py with x-matched-path header, verify exact routing
+    css_resp = client.get("/api/index.py", headers={"x-matched-path": "/css/styles.css"})
+    assert css_resp.status_code == 200
+    assert "text/css" in css_resp.headers.get("content-type", "")
+
+    js_resp = client.get("/api/index.py", headers={"x-matched-path": "/js/app.js"})
+    assert js_resp.status_code == 200
+    assert "javascript" in js_resp.headers.get("content-type", "")
+
+    health_resp = client.get("/api/index.py", headers={"x-matched-path": "/api/health"})
+    assert health_resp.status_code == 200
+    assert health_resp.json().get("status") == "ok"
+
+
+def test_public_directory_assets_exist():
+    root = Path(__file__).resolve().parent.parent
+    pub = root / "public"
+    assert pub.exists(), "public directory must exist for Vercel Edge CDN asset serving"
+    assert (pub / "index.html").exists()
+    assert (pub / "css" / "styles.css").exists()
+    assert (pub / "js" / "app.js").exists()
+    assert (pub / "js" / "api.js").exists()
+    assert (pub / "js" / "three.min.js").exists()
+    assert (pub / "js" / "quantum-universe.js").exists()
+
+
+def test_frontend_key_elements_integrity():
+    client = TestClient(app)
+    resp = client.get("/")
+    assert resp.status_code == 200
+    html = resp.text
+    # Verify Azure / LLM Key configuration controls
+    assert 'id="azure-topbar-pill"' in html
+    assert 'id="azure-pill-label"' in html
+    assert 'id="chat-configure-azure-btn"' in html
+    assert 'id="chat-model-badge"' in html
+    assert 'id="azure-config-modal"' in html
+    assert 'id="azure-modal-key"' in html
+    assert 'id="azure-modal-save-btn"' in html
+    assert 'id="azure-modal-test-btn"' in html
+    # Verify 1-click Demo credentials and auth tabs
+    assert 'id="btn-fill-hr-admin"' in html
+    assert 'id="btn-fill-recruiter"' in html
+    assert 'id="btn-copy-pass"' in html
+    assert 'id="auth-tab-signin"' in html
+    assert 'id="auth-tab-signup"' in html
+    assert 'id="hr-signup-form"' in html
+

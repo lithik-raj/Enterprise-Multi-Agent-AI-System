@@ -3,14 +3,19 @@
   "functions": {
     "api/index.py": {
       "maxDuration": 60,
-      "includeFiles": "frontend/**",
+      "includeFiles": "{frontend/**,public/**}",
       "excludeFiles": "{tests/**,evals/**,docs/**,scripts/**,data/datasets/**,data/employee_resumes/**,uploads/**}"
     }
   },
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/api/(.*)",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/((?!css/|js/|favicon\\.ico|.*\\.html|.*\\.css|.*\\.js).*)",
       "destination": "/api/index.py"
     }
   ]
 }
+
